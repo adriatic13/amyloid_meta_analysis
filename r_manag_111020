@@ -968,11 +968,9 @@ pdata_gse14499$noff<-sum(pdata_gse14499$studyf==1)
 pdata_gse14499 <- pdata_gse14499[just_vars_mous]
 -
 
-# # # # # H E R E : CHECK  SELECTS ! ! !
 #summary(pdata_gse10908)
-# Do NOT use this study - it has an empty expression set
-#   I emailed GEO (they have no further info)
-#   I emailed Prinzen lab (Claudia Prinzen - prinzen@uni-mainz.de) who referred me to Dietrich Trumbach who we are collaborating with as of July 2011
+# Empty expression set
+#   Prinzen lab...
 pdata_gse10908$sampleid<-pdata_gse10908$geo_accession
 pdata_gse10908$sample<-pdata_gse10908$title
 pdata_gse10908$study<-"gse10908"
