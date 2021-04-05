@@ -23,7 +23,7 @@ A bioinformatics approach allowing comparisons of gene expression, gene annotati
       Outcome: two target lists of genes of interest – by their expression across many 
          amyloid diseases, or by expression unique to individual amyloid diseases
          
-      ***Completed proof-of-concept through this stage
+      ***Completed proof-of-concept through this stage***
 
 2) Ontology annotation and data integration: 
       Create a semi-automated text mining and gene annotation tool using known 
