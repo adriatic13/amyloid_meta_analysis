@@ -1,0 +1,903 @@
+# R and PHP/SQL meta-analysis code - April 2011 - Adrian Marinovich
+#  (see r_110328 for additional code ideas)
+#
+
+#################################################################
+##### Load/save workspace via terminal:
+
+# in terminal: “sudo R” 
+# (remember: ">q()" to quit)"
+load("/home/adrian/tse_db/meta_analysis/wksp_analyz_mous110523.r")
+save.image("/home/adrian/tse_db/meta_analysis/wksp_analyz_mous110523.r")
+
+##### Load Biobase, GEOquery and MAMA (or, just load via RKWard):
+library("Biobase")
+library("GEOquery")
+library("MAMA")
+library("BSDA")
+-
+
+##### View and remove extraneous files to create analysis workspace
+objects()
+rm(exprs_gse10310_4134, exprs_gse10310_6412, exprs_gse10908, exprs_gse14499, exprs_gse1840, exprs_gse19677_1261,  exprs_gse19677_6333, exprs_gse23182, exprs_gse27588, exprs_gse2867, exprs_gse7207_339,exprs_gse7207_340, exprs_gse9914_1261, exprs_gse9914_339, exprs_ski2006, exprs_ski2008, gpl11094, gpl1261, gpl1487, gpl339, gpl340, gpl4134, gpl4464, gpl6333, gpl6412, gplbmapski2006, gse10310, gse10908, gse14499, gse1840, gse19677_1261, gse19677_6333, gse23182, gse27588, gse2867, gse7207, gse9914, just_vars_mous, nexprs_gse1840, nexprs_gse19677_1261, pvals_gse1840, pvals_gse19677_1261, ski2006, ski2008, trans_gpl11094, trans_gpl1261, trans_gpl1487, trans_gpl339, trans_gpl340, trans_gpl4134, trans_gpl4464, trans_gpl6333, trans_gpl6412, trans_gplbmapski2006, writ_gpl11094, writ_gpl1261, writ_gpl1487, writ_gpl339, writ_gpl4134, writ_gpl6412, writ_gplbmapski2006)
+
+##### Create analysis sets in PHP/SQL
+
+##### remove ID variable and make exprs sets as matrix:
+
+nexprs_gse... <- exprs_gse...
+nexprs_gse...$ID... <- NULL
+nexprs_gse... <- as.matrix(exprs_gse...)
+
+class_ <- pdata_gse19677_1261[,20]
+
+pvals_gse... <- array_sign( )
+pvals_gse... <- array_wilcox( )
+
+eset1<-pvals_gse...
+eset1<-pvals_gse...
+esets_<-list(eset1, eset2)
+
+
+##### Pull into mexprs sets into R from SQL:
+mexprs1840 <- read.table("/tmp/mexprs1840.txt", header=FALSE, sep="\t", col.names=c("refuni", "ID", "counter", "GSM31975", "GSM31976", "GSM31977", "GSM31978", "GSM31979", "GSM31980", "GSM31981", "GSM31982", "GSM31983", "GSM31984", "GSM31985", "GSM31986", "GSM31987", "GSM31988", "GSM31989", "GSM31990", "GSM31991", "GSM31992", "GSM31993", "GSM31994", "GSM31995", "GSM31996", "GSM31997", "GSM31998", "GSM31999", "GSM32000", "GSM32001", "GSM32002", "GSM32003", "GSM32004", "GSM32005", "GSM32006", "GSM32007", "GSM32008", "GSM32009", "GSM32010", "GSM32011", "GSM32012", "GSM32013", "GSM32014", "GSM32015", "GSM32016", "GSM32017", "GSM32018", "GSM32019", "GSM32020", "GSM32021", "GSM32022", "GSM32023", "GSM32024", "GSM32025", "GSM32026", "GSM32027", "GSM32028"))
+mexprs10310_4134 <- read.table("/tmp/mexprs10310_4134.txt", header=FALSE, sep="\t", col.names=c("refuni", "ID", "counter", "GSM260198", "GSM260204", "GSM260205", "GSM260230", "GSM260237", "GSM260240"))
+mexprs10310_6412 <- read.table("/tmp/mexprs10310_6412.txt", header=FALSE, sep="\t", col.names=c("refuni", "ID", "counter", "GSM259195", "GSM259200", "GSM259238", "GSM259239", "GSM259240", "GSM259241", "GSM259242", "GSM259243", "GSM259244", "GSM259250", "GSM259251", "GSM259252", "GSM259253", "GSM259254", "GSM259255", "GSM259256", "GSM259257", "GSM259330", "GSM259332", "GSM259333", "GSM259334", "GSM259336", "GSM259337", "GSM259338", "GSM259340", "GSM259347", "GSM259348", "GSM259350", "GSM259351", "GSM259353", "GSM259354", "GSM259356", "GSM259357"))
+mexprs19677_1261 <- read.table("/tmp/mexprs19677_1261.txt", header=FALSE, sep="\t", col.names=c("refuni", "ID", "counter", "GSM461842", "GSM461843", "GSM461844", "GSM461845", "GSM461846", "GSM461847", "GSM461848", "GSM461849", "GSM461850", "GSM461851", "GSM461852", "GSM461853", "GSM461854", "GSM461855", "GSM461856", "GSM461857", "GSM461858", "GSM461859"))
+mexprs9914_1261 <- read.table("/tmp/mexprs9914_1261.txt", header=FALSE, sep="\t", col.names=c("refuni", "ID", "counter", "GSM250869", "GSM250870", "GSM250871", "GSM250872", "GSM250873", "GSM250874", "GSM250875", "GSM250876", "GSM250877", "GSM250878"))
+mexprs9914_339 <- read.table("/tmp/mexprs9914_339.txt", header=FALSE, sep="\t", col.names=c("refuni", "ID", "counter", "GSM250857", "GSM250858", "GSM250859", "GSM250860", "GSM250861", "GSM250862", "GSM250863", "GSM250864", "GSM250865", "GSM250866", "GSM250867", "GSM250868"))
+mexprs2867 <- read.table("/tmp/mexprs2867.txt", header=FALSE, sep="\t", col.names=c("refuni", "ID", "counter", "GSM53341", "GSM53342", "GSM53343", "GSM53344", "GSM53345", "GSM53346", "GSM53347", "GSM53348", "GSM53349", "GSM53350", "GSM53351", "GSM53352", "GSM53353", "GSM53354", "GSM53355", "GSM53356", "GSM53357", "GSM53358", "GSM53359", "GSM53360"))
+mexprs23182 <- read.table("/tmp/mexprs23182.txt", header=FALSE, sep="\t", col.names=c("refuni", "ID", "counter", "GSM570750", "GSM570751", "GSM570752", "GSM570753", "GSM570754", "GSM570755", "GSM570756", "GSM570757", "GSM570758", "GSM570759", "GSM570760", "GSM570761"))
+mexprs7207_339 <- read.table("/tmp/mexprs7207_339.txt", header=FALSE, sep="\t", col.names=c("refuni", "ID", "counter", "GSM173164", "GSM173165", "GSM173166", "GSM173167", "GSM173168", "GSM173169"))
+mexprs14499 <- read.table("/tmp/mexprs14499.txt", header=FALSE, sep="\t", col.names=c("refuni", "ID", "counter", "GSM362115", "GSM362116", "GSM362117", "GSM362118", "GSM362119", "GSM362120", "GSM362121", "GSM362122", "GSM362123", "GSM362124", "GSM362125", "GSM362126", "GSM362127", "GSM362128", "GSM362129", "GSM362130", "GSM362131", "GSM362132", "GSM362133", "GSM362134", "GSM362135", "GSM362136", "GSM362137", "GSM362138", "GSM362139", "GSM362140"))
+mexprsski2006 <- read.table("/tmp/mexprsski2006.txt", header=FALSE, sep="\t", col.names=c("refuni", "ID", "counter", "ME7_19", "ME7_20", "X22L_21", "X22L_22", "RML_23", "RML_24"))
+mexprsski2008 <- read.table("/tmp/mexprsski2008.txt", header=FALSE, sep="\t", col.names=c("refuni", "ID", "counter", "mock_10B", "ME7_11B", "a22L_13B", "RML_16B", "mock_9B"))
+-
+
+##### Pull refuni from SQL
+refuni_d <- read.table("/tmp/refuni_d.txt", header=FALSE, sep="\t", col.names=c("refuni"))
+
+# These are your mexprs sets:
+#   mexprs1840
+#   mexprs10310_4134
+#   mexprs10310_6412
+#   mexprs19677_1261
+#   mexprs9914_1261
+#   mexprs9914_339
+#   mexprs2867
+#   mexprs23182
+#   mexprs7207_339
+#   mexprs14499
+#   mexprsski2006
+#   mexprsski2008
+
+
+##### Transpose mexprs and merge to pdata, dropping ID and counter:
+
+tmexprs1840<-as.data.frame(t(mexprs1840))
+tmexprs1840$sampleid<-rownames(tmexprs1840)
+write.table(tmexprs1840, file="/tmp/tmexprs1840.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+tmexprs1840 <- read.table("/tmp/tmexprs1840.txt", header=TRUE, sep="\t")
+- # check dim(tmexprs1840)
+tmexprs1840 <- tmexprs1840[3:56,]
+tmexprs1840p <- merge(tmexprs1840, pdata_gse1840, all.x=TRUE, by.x="refuni", by.y="sampleid")
+rownames(tmexprs1840p)<-tmexprs1840p$refuni
+tmexprs1840p$refuni<-NULL
+rm(tmexprs1840)
+-
+
+tmexprs10310_4134<-as.data.frame(t(mexprs10310_4134))
+tmexprs10310_4134$sampleid<-rownames(tmexprs10310_4134)
+write.table(tmexprs10310_4134, file="/tmp/tmexprs10310_4134.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+tmexprs10310_4134 <- read.table("/tmp/tmexprs10310_4134.txt", header=TRUE, sep="\t")
+- # check dim(tmexprs10310_4134)
+tmexprs10310_4134 <- tmexprs10310_4134[3:8,]
+tmexprs10310_4134p <- merge(tmexprs10310_4134, pdata_gse10310_4134, all.x=TRUE, by.x="refuni", by.y="sampleid")
+rownames(tmexprs10310_4134p)<-tmexprs10310_4134p$refuni
+tmexprs10310_4134p$refuni<-NULL
+rm(tmexprs10310_4134)
+-
+
+tmexprs10310_6412<-as.data.frame(t(mexprs10310_6412))
+tmexprs10310_6412$sampleid<-rownames(tmexprs10310_6412)
+write.table(tmexprs10310_6412, file="/tmp/tmexprs10310_6412.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+tmexprs10310_6412 <- read.table("/tmp/tmexprs10310_6412.txt", header=TRUE, sep="\t")
+- # check dim(tmexprs10310_6412)
+tmexprs10310_6412 <- tmexprs10310_6412[3:35,]
+tmexprs10310_6412p <- merge(tmexprs10310_6412, pdata_gse10310_6412, all.x=TRUE, by.x="refuni", by.y="sampleid")
+rownames(tmexprs10310_6412p)<-tmexprs10310_6412p$refuni
+tmexprs10310_6412p$refuni<-NULL
+rm(tmexprs10310_6412)
+-
+
+tmexprs19677_1261<-as.data.frame(t(mexprs19677_1261))
+tmexprs19677_1261$sampleid<-rownames(tmexprs19677_1261)
+write.table(tmexprs19677_1261, file="/tmp/tmexprs19677_1261.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+tmexprs19677_1261 <- read.table("/tmp/tmexprs19677_1261.txt", header=TRUE, sep="\t")
+- # check dim(tmexprs19677_1261)
+tmexprs19677_1261 <- tmexprs19677_1261[3:20,]
+tmexprs19677_1261p <- merge(tmexprs19677_1261, pdata_gse19677_1261, all.x=TRUE, by.x="refuni", by.y="sampleid")
+rownames(tmexprs19677_1261p)<-tmexprs19677_1261p$refuni
+tmexprs19677_1261p$refuni<-NULL
+rm(tmexprs19677_1261)
+-
+
+tmexprs9914_1261<-as.data.frame(t(mexprs9914_1261))
+tmexprs9914_1261$sampleid<-rownames(tmexprs9914_1261)
+write.table(tmexprs9914_1261, file="/tmp/tmexprs9914_1261.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+tmexprs9914_1261 <- read.table("/tmp/tmexprs9914_1261.txt", header=TRUE, sep="\t")
+- # check dim(tmexprs9914_1261)
+tmexprs9914_1261 <- tmexprs9914_1261[3:12,]
+tmexprs9914_1261p <- merge(tmexprs9914_1261, pdata_gse9914_1261, all.x=TRUE, by.x="refuni", by.y="sampleid")
+rownames(tmexprs9914_1261p)<-tmexprs9914_1261p$refuni
+tmexprs9914_1261p$refuni<-NULL
+rm(tmexprs9914_1261)
+-
+
+tmexprs9914_339<-as.data.frame(t(mexprs9914_339))
+tmexprs9914_339$sampleid<-rownames(tmexprs9914_339)
+write.table(tmexprs9914_339, file="/tmp/tmexprs9914_339.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+tmexprs9914_339 <- read.table("/tmp/tmexprs9914_339.txt", header=TRUE, sep="\t")
+- # check dim(tmexprs9914_339)
+tmexprs9914_339 <- tmexprs9914_339[3:14,]
+tmexprs9914_339p <- merge(tmexprs9914_339, pdata_gse9914_339, all.x=TRUE, by.x="refuni", by.y="sampleid")
+rownames(tmexprs9914_339p)<-tmexprs9914_339p$refuni
+tmexprs9914_339p$refuni<-NULL
+rm(tmexprs9914_339)
+-
+
+tmexprs2867<-as.data.frame(t(mexprs2867))
+tmexprs2867$sampleid<-rownames(tmexprs2867)
+write.table(tmexprs2867, file="/tmp/tmexprs2867.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+tmexprs2867 <- read.table("/tmp/tmexprs2867.txt", header=TRUE, sep="\t")
+- # check dim(tmexprs2867)
+tmexprs2867 <- tmexprs2867[3:22,]
+tmexprs2867p <- merge(tmexprs2867, pdata_gse2867, all.x=TRUE, by.x="refuni", by.y="sampleid")
+rownames(tmexprs2867p)<-tmexprs2867p$refuni
+tmexprs2867p$refuni<-NULL
+rm(tmexprs2867)
+-
+
+tmexprs23182<-as.data.frame(t(mexprs23182))
+tmexprs23182$sampleid<-rownames(tmexprs23182)
+write.table(tmexprs23182, file="/tmp/tmexprs23182.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+tmexprs23182 <- read.table("/tmp/tmexprs23182.txt", header=TRUE, sep="\t")
+- # check dim(tmexprs23182)
+tmexprs23182 <- tmexprs23182[3:14,]
+tmexprs23182p <- merge(tmexprs23182, pdata_gse23182, all.x=TRUE, by.x="refuni", by.y="sampleid")
+rownames(tmexprs23182p)<-tmexprs23182p$refuni
+tmexprs23182p$refuni<-NULL
+rm(tmexprs23182)
+-
+
+tmexprs7207_339<-as.data.frame(t(mexprs7207_339))
+tmexprs7207_339$sampleid<-rownames(tmexprs7207_339)
+write.table(tmexprs7207_339, file="/tmp/tmexprs7207_339.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+tmexprs7207_339 <- read.table("/tmp/tmexprs7207_339.txt", header=TRUE, sep="\t")
+- # check dim(tmexprs7207_339)
+tmexprs7207_339 <- tmexprs7207_339[3:8,]
+tmexprs7207_339p <- merge(tmexprs7207_339, pdata_gse7207_339, all.x=TRUE, by.x="refuni", by.y="sampleid")
+rownames(tmexprs7207_339p)<-tmexprs7207_339p$refuni
+tmexprs7207_339p$refuni<-NULL
+rm(tmexprs7207_339)
+-
+
+tmexprs14499<-as.data.frame(t(mexprs14499))
+tmexprs14499$sampleid<-rownames(tmexprs14499)
+write.table(tmexprs14499, file="/tmp/tmexprs14499.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+tmexprs14499 <- read.table("/tmp/tmexprs14499.txt", header=TRUE, sep="\t")
+- # check dim(tmexprs14499)
+tmexprs14499 <- tmexprs14499[3:28,]
+tmexprs14499p <- merge(tmexprs14499, pdata_gse14499, all.x=TRUE, by.x="refuni", by.y="sampleid")
+rownames(tmexprs14499p)<-tmexprs14499p$refuni
+tmexprs14499p$refuni<-NULL
+rm(tmexprs14499)
+-
+
+tmexprsski2006<-as.data.frame(t(mexprsski2006))
+tmexprsski2006$sampleid<-rownames(tmexprsski2006)
+write.table(tmexprsski2006, file="/tmp/tmexprsski2006.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+tmexprsski2006 <- read.table("/tmp/tmexprsski2006.txt", header=TRUE, sep="\t")
+- # check dim(tmexprsski2006)
+tmexprsski2006 <- tmexprsski2006[3:8,]
+tmexprsski2006p <- merge(tmexprsski2006, pdata_ski2006, all.x=TRUE, by.x="refuni", by.y="sampleid")
+rownames(tmexprsski2006p)<-tmexprsski2006p$refuni
+tmexprsski2006p$refuni<-NULL
+rm(tmexprsski2006)
+-
+
+tmexprsski2008<-as.data.frame(t(mexprsski2008))
+tmexprsski2008$sampleid<-rownames(tmexprsski2008)
+write.table(tmexprsski2008, file="/tmp/tmexprsski2008.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+tmexprsski2008 <- read.table("/tmp/tmexprsski2008.txt", header=TRUE, sep="\t")
+- # check dim(tmexprsski2008)
+tmexprsski2008 <- tmexprsski2008[3:7,]
+tmexprsski2008p <- merge(tmexprsski2008, pdata_ski2008, all.x=TRUE, by.x="refuni", by.y="sampleid")
+rownames(tmexprsski2008p)<-tmexprsski2008p$refuni
+tmexprsski2008p$refuni<-NULL
+rm(tmexprsski2008)
+-
+
+#############################################################################
+##### Subset tmexprs_p sets, create classes (as needed), strip non-exprs vars,
+#####   retranspose, set to numeric matrix, check row and column names
+
+tmexprs1840pad<- tmexprs1840p[which(tmexprs1840p$studya=='1' | tmexprs1840p$studyd=='1'),]
+colnames(tmexprs1840pad)
+class1840pad<-tmexprs1840pad$amyloid
+- # check colnames
+tmexprs1840pad<-tmexprs1840pad[c(-8280:-8311)]
+mexprs1840pad<-as.data.frame(t(tmexprs1840pad))
+-
+
+tmexprs1840pbe<- tmexprs1840p[which(tmexprs1840p$studyb=='1' | tmexprs1840p$studye=='1'),]
+colnames(tmexprs1840pbe)
+class1840pbe<-tmexprs1840pbe$amyloid
+- # check colnames
+tmexprs1840pbe<-tmexprs1840pbe[c(-8280:-8311)]
+mexprs1840pbe<-as.data.frame(t(tmexprs1840pbe))
+-
+
+tmexprs1840pcf<- tmexprs1840p[which(tmexprs1840p$studyc=='1' | tmexprs1840p$studyf=='1'),]
+colnames(tmexprs1840pcf)
+class1840pcf<-tmexprs1840pcf$amyloid
+- # check colnames
+tmexprs1840pcf<-tmexprs1840pcf[c(-8280:-8311)]
+mexprs1840pcf<-as.data.frame(t(tmexprs1840pcf))
+-
+
+tmexprs10310_4134pa<- tmexprs10310_4134p[which(tmexprs10310_4134p$studya=='1'),]
+colnames(tmexprs10310_4134pa)
+class10310_4134pa<-tmexprs10310_4134pa$amyloid
+- # check colnames
+tmexprs10310_4134pa<-tmexprs10310_4134pa[c(-21428:-21459)]
+mexprs10310_4134pa<-as.data.frame(t(tmexprs10310_4134pa))
+-
+
+tmexprs10310_6412pabc<- tmexprs10310_6412p[which(tmexprs10310_6412p$studya=='1' | tmexprs10310_6412p$studyb=='1' | tmexprs10310_6412p$studyc=='1'),]
+colnames(tmexprs10310_6412pabc)
+class10310_6412pabc<-tmexprs10310_6412pabc$amyloid
+- # check colnames
+tmexprs10310_6412pabc<-tmexprs10310_6412pabc[c(-8280:-8311)]
+mexprs10310_6412pabc<-as.data.frame(t(tmexprs10310_6412pabc))
+-
+
+tmexprs10310_6412pd<- tmexprs10310_6412p[which(tmexprs10310_6412p$studyd=='1'),]
+colnames(tmexprs10310_6412pd)
+class10310_6412pd<-tmexprs10310_6412pd$amyloid
+- # check colnames
+tmexprs10310_6412pd<-tmexprs10310_6412pd[c(-8280:-8311)]
+mexprs10310_6412pd<-as.data.frame(t(tmexprs10310_6412pd))
+-
+
+tmexprs19677_1261pa<- tmexprs19677_1261p[which(tmexprs19677_1261p$studya=='1'),]
+colnames(tmexprs19677_1261pa)
+class19677_1261pa<-tmexprs19677_1261pa$amyloid
+- # check colnames
+tmexprs19677_1261pa<-tmexprs19677_1261pa[c(-16961:-16992)]
+mexprs19677_1261pa<-as.data.frame(t(tmexprs19677_1261pa))
+-
+
+tmexprs19677_1261pb<- tmexprs19677_1261p[which(tmexprs19677_1261p$studyb=='1'),]
+colnames(tmexprs19677_1261pb)
+class19677_1261pb<-tmexprs19677_1261pb$amyloid
+- # check colnames
+tmexprs19677_1261pb<-tmexprs19677_1261pb[c(-16961:-16992)]
+mexprs19677_1261pb<-as.data.frame(t(tmexprs19677_1261pb))
+-
+
+tmexprs9914_1261pa<- tmexprs9914_1261p[which(tmexprs9914_1261p$studya=='1'),]
+colnames(tmexprs9914_1261pa)
+class9914_1261pa<-tmexprs9914_1261pa$amyloid
+- # check colnames
+tmexprs9914_1261pa<-tmexprs9914_1261pa[c(-12768:-12799)]
+mexprs9914_1261pa<-as.data.frame(t(tmexprs9914_1261pa))
+-
+ 
+tmexprs9914_339pabc<- tmexprs9914_339p[which(tmexprs9914_339p$studya=='1' | tmexprs9914_339p$studyb=='1' | tmexprs9914_339p$studyc=='1'),]
+colnames(tmexprs9914_339pabc)
+class9914_339pabc<-tmexprs9914_339pabc$amyloid
+- # check colnames
+tmexprs9914_339pabc<-tmexprs9914_339pabc[c(-12579:-12610)]
+mexprs9914_339pabc<-as.data.frame(t(tmexprs9914_339pabc))
+-
+
+tmexprs2867pbd<- tmexprs2867p[which(tmexprs2867p$studyb=='1' | tmexprs2867p$studyd=='1'),]
+colnames(tmexprs2867pbd)
+class2867pbd<-tmexprs2867pbd$amyloid
+- # check colnames
+tmexprs2867pbd<-tmexprs2867pbd[c(-12579:-12610)]
+mexprs2867pbd<-as.data.frame(t(tmexprs2867pbd))
+-
+
+tmexprs2867pac<- tmexprs2867p[which(tmexprs2867p$studya=='1' | tmexprs2867p$studyc=='1'),]
+colnames(tmexprs2867pac)
+class2867pac<-tmexprs2867pac$amyloid
+- # check colnames
+tmexprs2867pac<-tmexprs2867pac[c(-12579:-12610)]
+mexprs2867pac<-as.data.frame(t(tmexprs2867pac))
+-
+
+tmexprs23182pa<- tmexprs23182p[which(tmexprs23182p$studya=='1'),]
+colnames(tmexprs23182pa)
+class23182pa<-tmexprs23182pa$amyloid
+- # check colnames
+tmexprs23182pa<-tmexprs23182pa[c(-16961:-16992)]
+mexprs23182pa<-as.data.frame(t(tmexprs23182pa))
+-
+
+tmexprs7207_339pa<- tmexprs7207_339p[which(tmexprs7207_339p$studya=='1'),]
+colnames(tmexprs7207_339pa)
+class7207_339pa<-tmexprs7207_339pa$amyloid
+- # check colnames
+tmexprs7207_339pa<-tmexprs7207_339pa[c(-12579:-12610)]
+mexprs7207_339pa<-as.data.frame(t(tmexprs7207_339pa))
+-
+
+tmexprs14499pab<- tmexprs14499p[which(tmexprs14499p$studya=='1' | tmexprs14499p$studyb=='1'),]
+colnames(tmexprs14499pab)
+class14499pab<-tmexprs14499pab$amyloid
+- # check colnames
+tmexprs14499pab<-tmexprs14499pab[c(-16961:-16992)]
+mexprs14499pab<-as.data.frame(t(tmexprs14499pab))
+-
+
+tmexprsski2006pa<- tmexprsski2006p[which(tmexprsski2006p$studya=='1'),]
+colnames(tmexprsski2006pa)
+classski2006pa<-tmexprsski2006pa$amyloid
+- # check colnames
+tmexprsski2006pa<-tmexprsski2006pa[c(-8280:-8311)]
+mexprsski2006pa<-as.data.frame(t(tmexprsski2006pa))
+-
+
+tmexprsski2008pa<- tmexprsski2008p[which(tmexprsski2008p$studya=='1'),]
+colnames(tmexprsski2008pa)
+classski2008pa<-tmexprsski2008pa$amyloid
+- # check colnames
+tmexprsski2008pa<-tmexprsski2008pa[c(-12579:-12610)]
+mexprsski2008pa<-as.data.frame(t(tmexprsski2008pa))
+-
+
+
+############################################################################
+##### array_t_single for expression log ratios (t1or2=1)
+#####   and merge to refuni_d
+#array_t_single <- function(eset, md_=0, conf.level_=0.95)
+
+p1840pad <- array_t_single(mexprs1840pad, md_=0)
+rp1840pad<-cbind(p1840pad, mexprs1840pad)
+rp1840pad$refuni<-rownames(rp1840pad)
+rrp1840pad<-merge(refuni_d, rp1840pad, all.x=TRUE, by='refuni')
+rownames(rrp1840pad)<-rrp1840pad$refuni
+rrp1840pad<-rrp1840pad[c(2:3)]
+  dim(mexprs1840pad)
+  dim(rrp1840pad)
+p1840pbe <- array_t_single(mexprs1840pbe, md_=0)
+rp1840pbe<-cbind(p1840pbe, mexprs1840pbe)
+rp1840pbe$refuni<-rownames(rp1840pbe)
+rrp1840pbe<-merge(refuni_d, rp1840pbe, all.x=TRUE, by='refuni')
+rownames(rrp1840pbe)<-rrp1840pbe$refuni
+rrp1840pbe<-rrp1840pbe[c(2:3)]
+  dim(mexprs1840pbe)
+  dim(rrp1840pbe)
+p1840pcf <- array_t_single(mexprs1840pcf, md_=0)
+rp1840pcf<-cbind(p1840pcf, mexprs1840pcf)
+rp1840pcf$refuni<-rownames(rp1840pcf)
+rrp1840pcf<-merge(refuni_d, rp1840pcf, all.x=TRUE, by='refuni')
+rownames(rrp1840pcf)<-rrp1840pcf$refuni
+rrp1840pcf<-rrp1840pcf[c(2:3)]
+  dim(mexprs1840pcf)
+  dim(rrp1840pcf)
+    rm(p1840pad, rp1840pad, p1840pbe, rp1840pbe, p1840pcf, rp1840pcf)
+
+p10310_4134pa <- array_t_single(mexprs10310_4134pa, md_=0)
+rp10310_4134pa<-cbind(p10310_4134pa, mexprs10310_4134pa)
+rp10310_4134pa$refuni<-rownames(rp10310_4134pa)
+rrp10310_4134pa<-merge(refuni_d, rp10310_4134pa, all.x=TRUE, by='refuni')
+rownames(rrp10310_4134pa)<-rrp10310_4134pa$refuni
+rrp10310_4134pa<-rrp10310_4134pa[c(2:3)]
+  dim(mexprs10310_4134pa)
+  dim(rrp10310_4134pa)
+
+#data constancy problem...not due to NA
+# didn't work: mexprs10310_6412pabc_<-na.omit(mexprs10310_6412pabc)
+# so, rewrote array_t_single to include try(), making NA, and forcing numeric
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259195==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259200==''] <- NA  
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259238==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259239==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259240==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259241==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259242==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259243==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259244==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259250==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259251==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259252==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259253==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259254==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259255==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259256==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259257==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259347==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259348==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259350==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259351==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259353==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259354==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259356==''] <- NA
+mexprs10310_6412pabc[mexprs10310_6412pabc$GSM259357==''] <- NA
+mexprs10310_6412pabc <- as.matrix(mexprs10310_6412pabc)
+p10310_6412pabc <- array_t_single(mexprs10310_6412pabc, md_=0)
+rp10310_6412pabc<-cbind(p10310_6412pabc, mexprs10310_6412pabc)
+rp10310_6412pabc$refuni<-rownames(rp10310_6412pabc)
+rrp10310_6412pabc<-merge(refuni_d, rp10310_6412pabc, all.x=TRUE, by='refuni')
+rownames(rrp10310_6412pabc)<-rrp10310_6412pabc$refuni
+rrp10310_6412pabc<-rrp10310_6412pabc[c(2:3)]
+  dim(mexprs10310_6412pabc)
+  dim(rrp10310_6412pabc)
+
+#data constancy problem...
+p10310_6412pd <- array_t_single(mexprs10310_6412pd, md_=0)
+rp10310_6412pd<-cbind(p10310_6412pd, mexprs10310_6412pd)
+rp10310_6412pd$refuni<-rownames(rp10310_6412pd)
+rrp10310_6412pd<-merge(refuni_d, rp10310_6412pd, all.x=TRUE, by='refuni')
+rownames(rrp10310_6412pd)<-rrp10310_6412pd$refuni
+rrp10310_6412pd<-rrp10310_6412pd[c(2:3)]
+  dim(mexprs10310_6412pd)
+  dim(rrp10310_6412pd)
+
+#data constancy problem...
+pski2006pa <- array_t_single(mexprsski2006pa, md_=0)
+rpski2006pa<-cbind(pski2006pa, mexprsski2006pa)
+rpski2006pa$refuni<-rownames(rpski2006pa)
+rrpski2006pa<-merge(refuni_d, rpski2006pa, all.x=TRUE, by='refuni')
+rownames(rrpski2006pa)<-rrpski2006pa$refuni
+rrpski2006pa<-rrpski2006pa[c(2:3)]
+  dim(mexprsski2006pa)
+  dim(rrpski2006pa)
+-
+
+#######################################################################
+##### array_t_double for straight expression comparisons (t1or2=2)
+#####   and merge to refuni_d
+#array_t_double <- function(eset, class, conf.level_=0.95)
+
+pski2008pa <- array_t_double(mexprsski2008pa, classski2008pa, conf.level_=0.95)
+rpski2008pa<-cbind(pski2008pa, mexprsski2008pa)
+rpski2008pa$refuni<-rownames(rpski2008pa)
+rrpski2008pa<-merge(refuni_d, rpski2008pa, all.x=TRUE, by='refuni')
+rownames(rrpski2008pa)<-rrpski2008pa$refuni
+rrpski2008pa<-rrpski2008pa[c(2:3)]
+  dim(mexprsski2008pa)
+  dim(rrpski2008pa)
+p19677_1261pa <- array_t_double(mexprs19677_1261pa, class19677_1261pa, conf.level_=0.95)
+rp19677_1261pa<-cbind(p19677_1261pa, mexprs19677_1261pa)
+rp19677_1261pa$refuni<-rownames(rp19677_1261pa)
+rrp19677_1261pa<-merge(refuni_d, rp19677_1261pa, all.x=TRUE, by='refuni')
+rownames(rrp19677_1261pa)<-rrp19677_1261pa$refuni
+rrp19677_1261pa<-rrp19677_1261pa[c(2:3)]
+  dim(mexprs19677_1261pa)
+  dim(rrp19677_1261pa)
+p19677_1261pb <- array_t_double(mexprs19677_1261pb, class19677_1261pb, conf.level_=0.95)
+rp19677_1261pb<-cbind(p19677_1261pb, mexprs19677_1261pb)
+rp19677_1261pb$refuni<-rownames(rp19677_1261pb)
+rrp19677_1261pb<-merge(refuni_d, rp19677_1261pb, all.x=TRUE, by='refuni')
+rownames(rrp19677_1261pb)<-rrp19677_1261pb$refuni
+rrp19677_1261pb<-rrp19677_1261pb[c(2:3)]
+  dim(mexprs19677_1261pb)
+  dim(rrp19677_1261pb)
+p9914_1261pa <- array_t_double(mexprs9914_1261pa, class9914_1261pa, conf.level_=0.95)
+rp9914_1261pa<-cbind(p9914_1261pa, mexprs9914_1261pa)
+rp9914_1261pa$refuni<-rownames(rp9914_1261pa)
+rrp9914_1261pa<-merge(refuni_d, rp9914_1261pa, all.x=TRUE, by='refuni')
+rownames(rrp9914_1261pa)<-rrp9914_1261pa$refuni
+rrp9914_1261pa<-rrp9914_1261pa[c(2:3)]
+  dim(mexprs9914_1261pa)
+  dim(rrp9914_1261pa)
+p9914_339pabc <- array_t_double(mexprs9914_339pabc, class9914_339pabc, conf.level_=0.95)
+rp9914_339pabc<-cbind(p9914_339pabc, mexprs9914_339pabc)
+rp9914_339pabc$refuni<-rownames(rp9914_339pabc)
+rrp9914_339pabc<-merge(refuni_d, rp9914_339pabc, all.x=TRUE, by='refuni')
+rownames(rrp9914_339pabc)<-rrp9914_339pabc$refuni
+rrp9914_339pabc<-rrp9914_339pabc[c(2:3)]
+  dim(mexprs9914_339pabc)
+  dim(rrp9914_339pabc)
+p2867pbd <- array_t_double(mexprs2867pbd, class2867pbd, conf.level_=0.95)
+rp2867pbd<-cbind(p2867pbd, mexprs2867pbd)
+rp2867pbd$refuni<-rownames(rp2867pbd)
+rrp2867pbd<-merge(refuni_d, rp2867pbd, all.x=TRUE, by='refuni')
+rownames(rrp2867pbd)<-rrp2867pbd$refuni
+rrp2867pbd<-rrp2867pbd[c(2:3)]
+  dim(mexprs2867pbd)
+  dim(rrp2867pbd)
+p2867pac <- array_t_double(mexprs2867pac, class2867pac, conf.level_=0.95)
+rp2867pac<-cbind(p2867pac, mexprs2867pac)
+rp2867pac$refuni<-rownames(rp2867pac)
+rrp2867pac<-merge(refuni_d, rp2867pac, all.x=TRUE, by='refuni')
+rownames(rrp2867pac)<-rrp2867pac$refuni
+rrp2867pac<-rrp2867pac[c(2:3)]
+  dim(mexprs2867pac)
+  dim(rrp2867pac)
+p23182pa <- array_t_double(mexprs23182pa, class23182pa, conf.level_=0.95)
+rp23182pa<-cbind(p23182pa, mexprs23182pa)
+rp23182pa$refuni<-rownames(rp23182pa)
+rrp23182pa<-merge(refuni_d, rp23182pa, all.x=TRUE, by='refuni')
+rownames(rrp23182pa)<-rrp23182pa$refuni
+rrp23182pa<-rrp23182pa[c(2:3)]
+  dim(mexprs23182pa)
+  dim(rrp23182pa)
+p7207_339pa <- array_t_double(mexprs7207_339pa, class7207_339pa, conf.level_=0.95)
+rp7207_339pa<-cbind(p7207_339pa, mexprs7207_339pa)
+rp7207_339pa$refuni<-rownames(rp7207_339pa)
+rrp7207_339pa<-merge(refuni_d, rp7207_339pa, all.x=TRUE, by='refuni')
+rownames(rrp7207_339pa)<-rrp7207_339pa$refuni
+rrp7207_339pa<-rrp7207_339pa[c(2:3)]
+  dim(mexprs7207_339pa)
+  dim(rrp7207_339pa)
+p14499pab <- array_t_double(mexprs14499pab, class14499pab, conf.level_=0.95)
+rp14499pab<-cbind(p14499pab, mexprs14499pab)
+rp14499pab$refuni<-rownames(rp14499pab)
+rrp14499pab<-merge(refuni_d, rp14499pab, all.x=TRUE, by='refuni')
+rownames(rrp14499pab)<-rrp14499pab$refuni
+rrp14499pab<-rrp14499pab[c(2:3)]
+  dim(mexprs14499pab)
+  dim(rrp14499pab)
+-
+
+
+####################################################################
+##### Create esets and n_s sets
+
+#all, in order
+eset10<-list(rrp1840pad, rrp1840pbe, rrp1840pcf, rrp10310_4134pa, rrpski2008pa, rrp23182pa, rrp7207_339pa, rrp9914_1261pa, rrp2867pbd, rrp2867pac, rrp19677_1261pa, rrp19677_1261pb, rrp14499pab)
+n_s10<-list(16, 20, 18, 6, 5, 6, 6, 10, 11, 9, 8, 10, 18)
+
+
+# DIFFERENT ORDERING:
+#all
+eset1<-list(rrp1840pad, rrp1840pbe, rrp1840pcf, rrp10310_4134pa, rrpski2008pa, rrp19677_1261pa, rrp19677_1261pb, rrp9914_1261pa, rrp2867pbd, rrp2867pac, rrp23182pa, rrp7207_339pa, rrp14499pab)
+n_s1<-list(16, 20, 18, 6, 5, 8, 10, 10, 11, 9, 6, 6, 18)
+
+#among scrapie
+eset2<-list(rrp1840pad, rrp1840pbe, rrp1840pcf, rrp10310_4134pa, rrpski2008pa, rrp23182pa, rrp7207_339pa)
+n_s2<-list(16, 20, 18, 6, 5, 6, 6)
+
+#among degen
+eset3<-list(rrp19677_1261pa, rrp19677_1261pb, rrp9914_1261pa, rrp2867pbd, rrp2867pac, rrp14499pab)
+n_s3<-list(8, 10, 10, 11, 9, 18)
+
+#among HD: 
+eset4<-list(rrp19677_1261pa, rrp19677_1261pb)
+n_s4<-list(8, 10)
+
+#among SCA: 
+eset5<-list(rrp9914_1261pa, rrp2867pbd, rrp2867pac)
+n_s5<-list(10, 11, 9)
+
+#among early scrapie:
+eset6<-list(rrp1840pad, rrp1840pbe, rrpski2008pa)
+n_s6<-list(16, 20, 5)
+
+#among scrapie and SCA:
+eset7<-list(rrp1840pad, rrp1840pbe, rrp1840pcf, rrp10310_4134pa, rrpski2008pa, rrp9914_1261pa, rrp2867pbd, rrp2867pac, rrp23182pa, rrp7207_339pa)
+n_s7<-list(16, 20, 18, 6, 5, 10, 11, 9, 6, 6)
+
+#among late scrapie:
+eset8<-list(rrp1840pcf, rrp10310_4134pa, rrp23182pa, rrp7207_339pa)
+n_s8<-list(18, 6, 6, 6)
+
+
+#####################################################################
+##### Meta-analysis
+#pvalcomb_post_p <- function(esets, n_s, BHth=0.05)
+
+#all, in order
+m10 <- pvalcomb_post_p(eset10, n_s10, BHth=0.05)
+
+# DIFFERENT ORDERING:
+#all
+m1 <- pvalcomb_post_p(eset1, n_s1, BHth=0.05)
+    DE    IDD   Loss    IDR    IRR 
+  1.00   0.00 930.00   0.00  99.89 
+          study1 study2 study3 study4 study5 study6 study7 study8 study9
+NM_177429      0      0      1      0      0      0      0      0      0
+          study10 study11 study12 study13 AllIndStudies Meta TestStatistic
+NM_177429       0       0       0       0             1    1          -Inf
+
+#among scrapie
+m2 <- pvalcomb_post_p(eset2, n_s2, BHth=0.05)
+    DE    IDD   Loss    IDR    IRR 
+ 14.00   1.00 725.00   7.14  98.24
+             study1 study2 study3 study4 study5 study6 study7 AllIndStudies
+NM_001037999      0      0      1      0      0      0      0             1
+NM_007657         0      0      1      0      0      1      1             1
+NM_007695         0      0      1      0      0      1      0             1
+NM_008377         0      0      0      0      0      0      0             0
+NM_009657         0      0      1      0      0      0      0             1
+NM_009696         0      0      1      0      0      0      0             1
+NM_009976         0      0      1      0      0      0      0             1
+NM_010422         0      0      1      0      0      1      0             1
+NM_013415         0      0      1      0      0      0      0             1
+NM_013467         0      0      1      0      0      0      0             1
+NM_019503         0      0      1      0      0      1      0             1
+NM_028044         0      0      1      0      0      0      1             1
+NM_175217         0      0      0      0      0      1      0             1
+NM_177429         0      0      1      0      0      0      0             1
+             Meta TestStatistic
+NM_001037999    1     -4.837411
+NM_007657       1     -4.822374
+NM_007695       1     -4.637538
+NM_008377       1     -4.885441
+NM_009657       1     -5.447491
+NM_009696       1     -4.931293
+NM_009976       1     -5.814834
+NM_010422       1     -5.264890
+NM_013415       1     -5.251290
+NM_013467       1     -6.000744
+NM_019503       1     -4.393572
+NM_028044       1     -4.937762
+NM_175217       1     -4.421626
+NM_177429       1          -Inf
+(NM_008377=Lrig1 leucine-rich repeats and immunoglobulin-like domains)
+
+#among degen
+m3 <- pvalcomb_post_p(eset3, n_s3, BHth=0.05)
+   DE    IDD   Loss    IDR    IRR 
+  1.00   0.00 204.00   0.00  99.51
+          study1 study2 study3 study4 study5 study6 AllIndStudies Meta
+NM_025964      0      0      0      1      0      0             1    1
+          TestStatistic
+NM_025964     -5.300522
+
+#among HD
+m4 <- pvalcomb_post_p(eset4, n_s4, BHth=0.05)
+ DE  IDD Loss  IDR  IRR 
+   0    0    1  NaN  100 
+#among SCA
+m5 <- pvalcomb_post_p(eset5, n_s5, BHth=0.05)
+    DE    IDD   Loss    IDR    IRR 
+ 60.00  31.00 174.00  51.67  85.71
+             study1 study2 study3 AllIndStudies Meta TestStatistic
+NM_001025395      0      0      0             0    1     -4.330656
+NM_001037957      0      0      0             0    1     -4.096582
+NM_001111331      0      0      1             1    1      4.308464
+NM_001113325      0      0      1             1    1     -4.545274
+NM_001134829      0      0      0             0    1      4.930832
+NM_001141921      0      0      0             0    1     -4.434200
+NM_007847         0      0      0             0    1     -4.108279
+NM_008138         0      0      0             0    1     -4.605199
+NM_008305         0      0      0             0    1     -4.698250
+NM_008453         0      0      0             0    1     -4.054963
+NM_008784         0      0      0             0    1     -4.350872
+NM_009237         0      0      0             0    1     -4.293150
+NM_009448         0      0      0             0    1     -4.136059
+NM_009554         0      1      0             1    1      3.996313
+NM_009620         0      0      1             1    1     -4.299987
+NM_010727         0      0      0             0    1     -4.787839
+NM_011609         0      0      0             0    1     -4.014470
+NM_013610         0      0      0             0    1     -4.467683
+NM_013730         0      0      0             0    1     -4.066817
+NM_013770         0      0      1             1    1     -4.171836
+NM_013912         0      1      0             1    1     -4.109693
+NM_016681         0      0      1             1    1     -4.667144
+NM_016961         0      0      1             1    1      4.402999
+NM_018866         0      1      1             1    1      4.276114
+NM_019432         0      1      0             1    1      4.678517
+NM_022313         0      0      0             0    1     -4.059067
+NM_023625         0      0      1             1    1     -4.805725
+NM_023655         0      0      1             1    1      4.523030
+NM_024478         0      0      1             1    1     -4.026442
+NM_025536         0      0      1             1    1      4.428663
+NM_025964         0      1      0             1    1     -4.640867
+NM_026079         0      0      1             1    1      4.049525
+NM_026139         0      0      0             0    1     -4.494631
+NM_026380         0      0      1             1    1      4.266432
+NM_026400         0      0      1             1    1      3.995762
+NM_026742         0      0      0             0    1      4.244140
+NM_027230         0      0      0             0    1      4.765947
+NM_027911         0      0      0             0    1     -4.109798
+NM_028211         0      0      0             0    1     -4.341940
+NM_028557         0      0      1             1    1     -4.029462
+NM_029667         0      0      1             1    1     -4.131567
+NM_029701         0      0      1             1    1      4.426963
+NM_031874         0      0      1             1    1      4.145790
+NM_033648         0      1      1             1    1      5.210364
+NM_054046         0      0      1             1    1     -4.252297
+NM_080557         0      1      0             1    1     -4.352632
+NM_133201         0      0      0             0    1     -4.338014
+NM_133768         0      0      1             1    1      4.074564
+NM_138667         0      0      0             0    1      4.078762
+NM_144921         0      0      1             1    1     -4.227921
+NM_145383         0      0      0             0    1     -4.458168
+NM_146017         0      0      0             0    1     -4.198799
+NM_146155         0      0      0             0    1     -3.990840
+NM_146187         0      0      0             0    1     -4.393154
+NM_153419         0      0      1             1    1     -4.566028
+NM_172286         0      0      0             0    1      4.093548
+NM_172739         0      0      0             0    1      4.015509
+NM_177545         0      0      0             0    1     -4.409538
+NM_178337         0      0      1             1    1      4.307463
+NM_178408         0      0      0             0    1     -4.477462
+
+#among early scrapie:
+m6 <- pvalcomb_post_p(eset6, n_s6, BHth=0.05)
+  DE  IDD Loss  IDR  IRR 
+   0    0    6  NaN  100 
+#among scrapie and SCA:
+m7 <- pvalcomb_post_p(eset7, n_s7, BHth=0.05)
+    DE    IDD   Loss    IDR    IRR 
+ 11.00   2.00 920.00  18.18  99.03
+             study1 study2 study3 study4 study5 study6 study7 study8 study9
+NM_001037999      0      0      1      0      0      0      0      0      0
+NM_001040631      0      0      0      0      0      0      0      1      0
+NM_007695         0      0      1      0      0      0      0      0      1
+NM_008138         0      0      0      0      0      0      0      0      0
+NM_008377         0      0      0      0      0      0      0      0      0
+NM_008675         0      0      0      0      0      0      0      1      0
+NM_009976         0      0      1      0      0      0      0      0      0
+NM_010422         0      0      1      0      0      0      0      0      1
+NM_013415         0      0      1      0      0      0      0      0      0
+NM_024281         0      0      0      0      0      0      0      0      0
+NM_177429         0      0      1      0      0      0      0      0      0
+             study10 AllIndStudies Meta TestStatistic
+NM_001037999       0             1    1     -4.478331
+NM_001040631       0             1    1     -4.602217
+NM_007695          0             1    1     -5.202126
+NM_008138          0             0    1     -5.021023
+NM_008377          0             0    1     -4.415428
+NM_008675          0             1    1     -4.486628
+NM_009976          0             1    1     -4.663164
+NM_010422          0             1    1     -4.714770
+NM_013415          0             1    1     -4.419755
+NM_024281          1             1    1     -4.441310
+NM_177429          0             1    1          -Inf
+
+#among late scrapie:
+m8 <- pvalcomb_post_p(eset8, n_s8, BHth=0.05)
+    DE    IDD   Loss    IDR    IRR 
+ 23.00   2.00 712.00   8.70  97.14 
+
+
+##### Making list with refuni reference:
+m10list<-metalist.to.matrix(m10, refuni_d$refuni)
+write.table(m10list, file="/home/adrian/tse_db/meta_analysis/m10.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=TRUE, col.names=FALSE)
+
+#DIFFERENT ORDERING
+m1list<-metalist.to.matrix(m1, refuni_d$refuni)
+write.table(m1list, file="/home/adrian/tse_db/meta_analysis/m1.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=TRUE, col.names=FALSE)
+
+m2list<-metalist.to.matrix(m2, refuni_d$refuni)
+write.table(m2list, file="/home/adrian/tse_db/meta_analysis/m2.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=TRUE, col.names=FALSE)
+
+m3list<-metalist.to.matrix(m3, refuni_d$refuni)
+write.table(m3list, file="/home/adrian/tse_db/meta_analysis/m3.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=TRUE, col.names=FALSE)
+
+m5list<-metalist.to.matrix(m5, refuni_d$refuni)
+write.table(m5list, file="/home/adrian/tse_db/meta_analysis/m5.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=TRUE, col.names=FALSE)
+
+m7list<-metalist.to.matrix(m7, refuni_d$refuni)
+write.table(m7list, file="/home/adrian/tse_db/meta_analysis/m7.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=TRUE, col.names=FALSE)
+
+#TO VIEW
+m10_<-as.data.frame(m10list)
+m10_[which(m10_$Meta=='1'),]
+m10_all<-m10_[which(m10_$AllIndStudies=='1' | m10_$Meta=='1'),]
+write.table(m10_all, file="/home/adrian/tse_db/meta_analysis/m10all.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=TRUE, col.names=FALSE)
+
+
+
+###########################################################################
+               ###
+###########################################################################
+                     ###
+###########################################################################
+                           ###
+###########################################################################
+                                 ###
+###########################################################################
+                                       ###
+###########################################################################
+                                             ###
+###########################################################################
+RESULTS:
+DE - the number of significant genes in Meta-Analysis
+IDD - genes which are significant in Meta-Analysis but not in individual studies
+Loss - genes significant in individual data sets but not in Meta-Analysis
+IDR & IRR are the percentages of Integration Driven Discoveries and Integration Driven Revisions in identified differentially expressed genes
+
+#From MAMA_Ihnatova2010:
+#Functions pvalcombination and pvalcombination.paired provide meta-analysis
+#based on combination of p-values. The former is designed for unpaired data and
+#the latter for paired design of microarray experiments. Because, our data sets
+#are unpaired, we will use pvalcombination. The function requires: a list of #gene expression data matrices (esets), a list of vectors of class labels
+#(classes), type of test statistics (moderated) and threshold for signiﬁcance 
+#(BHth). It returns list of indices of selected genes. Three possible values 
+#for argument moderated are available: "t" for common t-test, "limma" for 
+#moderated t-test used in limma package [7] and "SMVar" for moderated t-test 
+#deﬁned in SMVar package [8].
+#
+#Several characteristics which have been deﬁned in meta-analysis of microarray 
+#(especially for methods which combine p-values or eﬀect sizes). This 
+#characteristics are outprinted by the function. DE denotes number of 
+#signiﬁcant genes in meta-analysis. IDD represents Integration Driven 
+#Discoveries, it means genes which are signiﬁcant in meta-analysis but not in 
+#any of the individual studies alone. Other way round, if a gene is signiﬁcant 
+#only in individual data sets but not in meta-analysis, it is called 
+#Integration Driven Revision and Loss is a number of such genes. IDR and IRR 
+#are percentages of Integration Driven Discoveries and Integration Driven 
+#Revisions in identiﬁed diﬀerentially expressed
+#genes (DE).
+#
+#The returned object is a list with six slots. Study1 to Study3 are numeric 
+#vectors with indices of diﬀerentially expressed genes in data sets 1 to 3. 
+#AllIndStudies is a vector of indices of diﬀerentially expressed genes in at 
+#least one data set. Diﬀerentially expressed genes found by meta-analysis #have their indices stored in Meta. And ﬁnally, a slot called TestStatistic is 
+#a vector with test statistics in meta-analysis.
+
+
+>>>
+
+also consider these studies:
+
+GSE26927 record: Common neuroinflammatory pathways in neurodegenerative diseases. [Homo sapiens] 
+
+GSE20291 record: Transcriptional analysis of putamen in Parkinson's disease [Homo sapiens] 
+
+GSE9770 record: Non-demented individuals with intermediate Alzheimer's neuropathologies - neuronal expression (6 regions) [Homo sapiens] 
+
+GSE1297 record: Incipient Alzheimer's Disease: Microarray Correlation Analyses [Homo sapiens] 
+
+GSE20168 record: Transcriptional analysis of prefrontal area 9 in Parkinson's disease [Homo sapiens] 
+
+GSE16759 record: mRNA and miRNA expression in parietal lobe cortex in Alzheimer's disease [Homo sapiens] 
+
+GSE20146 record: Expression analysis of dissected GPi in Parkinson's disease [Homo sapiens] 
+
+GSE20141 record: Expression analysis of laser-dissected SNpc neurons in Parkinson's disease [Homo sapiens] 
+
+GDS2821 record: Parkinson’s disease: substantia nigra [Homo sapiens] 
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+>>>>>>>>>>>>>>>>
+
+Maybe try this (from Sheena Scroggins, Susan McGowan, John Caras - http://www.scribd.com/doc/49679019/Project-O):
+
+Meta-Analysis of Microarray Data
+
+ Method used - combining p-values
+This is performed by obtaining two measurements of significance of change in gene expression
+1. value of test-statistic
+2. p-value
+This method combines the p-values from all three studies and results them as one p-value.
+
+Make expression sets, apply filters and merge:
+
+> library(MAMA)
+
+> eset1 = call.exprs(phenodata1, "rma")
+
+> eset1 = nsFilter(eset1, require.entrez = TRUE, require.GOBP = TRUE,remove.dupEntrez = TRUE, var.func =
+IQR, var.cutoff = 0.5, feature.exclude ="^AFFX")
+
+> eset1.data = eset1$eset
+
+(I assume now do this twice more to get eset2 and eset3?)
+
+> esets = list(exprs(eset1.data), exprs(eset2.data), exprs(eset3.data))
+
+> classes = list(pData(phenodata1)[,2], pData(phenodata2)[,2],pData(phenodata3)[,2])
+
+Detecting differentially expressed genes
+
+> pvalt = pvalcombination(esets, classes, moderated = "t", BHth= 0.01)
+
+DE  IDD Loss  IDR  IRR
+0    0   92   NaN  100
+
+RESULTS:
+DE - this refers to the number of significant genes in Meta-Analysis.  Our chosen group of genes shows none.
+IDD - genes which are significant in Meta-Analysis but not inindividual studies.  None is expected since no DEG genes were found.
+Loss - genes significant in individual data sets but not in Meta-Analysis.
+IDR & IRR are the percentages of Integration Driven Dis-coveries and Integration Driven Revisions in identified differentiallyexpressed genes.
