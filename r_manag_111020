@@ -1,0 +1,1500 @@
+# R and PHP/SQL meta-analysis code - July 2011 - Adrian Marinovich
+#  (see r_110521 for prior code)
+#
+# Human brain studies from GEO:
+#
+# GSE15222 record: Genetic control of human brain transcript expression in 
+# Alzheimer’s disease. [Homo sapiens] 
+#   webster2009
+#
+# GSE5281 record: Alzheimer's disease and the normal aged brain (steph-affy-
+# human-433773) [Homo sapiens] 
+#   liang2008
+#
+# GSE20295 record: Transcriptional analysis of multiple brain regions in 
+# Parkinson's disease [Homo sapiens]
+#   zhang2005
+#
+# GSE7621 record: Expression data of substantia nigra from postmortem human 
+# brain of Parkinson's disease patients (PD) [Homo sapinew_gplens] 
+#   lesnick2007
+#   (Papapetropoulos S, Ffrench-Mullen J, McCorquodale D, Qin Y, Pablo J, et
+#    al. (2006) Multiregional gene expression profiling identifies MRPS6 as a
+#    possible candidate gene for Parkinson’s disease. Gene Expr 13: 205–215.)
+# Corresponds to GDS2821
+#
+#
+# Mouse brain studies from GEO:
+#
+# GSE1840 record: Identification of central nervous system genes involved in 
+# the host response to the scrapie agent. [Mus musculus] 
+#   booth2004
+#
+# GSE10310 record: Comprehensive transcriptional profiling of prion infection 
+# in mouse models reveals networks of responsive genes. [Mus musculus] 
+#   sorensen2008
+#
+# GSE19677 record: Striatum of Huntington's disease model mice [Mus musculus]
+#   becanovic2010
+#
+# GSE12354 record: Gene profiling of mouse brain infected with scrapie strain 
+# 22A_End-point analysis [Mus musculus] - ** miRNA **
+#   saba2008
+#
+# GSE9914 record: Expression data from early symptomatic Sca1154Q/2Q and 
+# Sca7266Q/5Q knock-in cerebellum [Mus musculus] 
+#   gatchel2008
+#
+# GSE2867 record: Zoghbi-5R01NS027699-14 [Mus musculus]
+#   no pub
+#
+# GSE25926 record: Comparative transcriptome profiling of Amyloid Precursor 
+# Protein APP family members in the adult cortex [Mus musculus]  
+#  aydin2011, NOT AN AD MODEL (prefrontal cortices of male mice (24-28 wks): 
+#  WT(n=3) APP-/-(n=3) APPα/α(n=3) APLP2-/-(n=3) APLP(R1)-/-(n=3). WT, 
+#  APP-/-, APPα/α, APLP2-/- were backcrossed 6 gens to C57BL/6 mice. A
+#  (R1)-/- harbors identical knockout allele as APLP2-/- but back-crossed 
+#  only once)
+#
+# GSE27588 record: Elucidating mechanisms by which regulated expression of 
+# proteoglycans and glycosylation-related genes in the striatum contribute to 
+# Huntington disease [Homo sapiens; Mus musculus] 
+#   no pub
+#
+# GSE23182 record: Systemic inflammation modulates Fc receptor expression on 
+# microglia in chronic neurodegeneration [Mus musculus] 
+#   no pub
+#
+# GSE7207 record: Preclinical CNS changes following peripheral murine RML 
+# prion challenge [Mus musculus] 
+#   no pub
+#
+# GSE1555 record: Vehicle and sAPPalpha-treated hippocampal slice cultures 
+# [Mus musculus] - NOT AN AD MOUSE ** hippocampus slice ** (3 sAPPalpha mice, 
+#  3 control mice)
+#   stein2004
+#   
+# GSE1556 record: Control vs. APPSw mice gene expressions [Mus musculus] 
+#  - NOT AN AD MOUSE (stein2004, 2 APPSw transgenic mice, 2 control mice)
+#  stein2004 
+#
+# GSE14499 record: Effect of BDNF on the APP transgenic mouse model of 
+#  Alzheimer's disease [Mus musculus] 
+#   nagahara2009
+#
+# GSE10908 record: Differential gene expression in ADAM10 over-expressing 
+#  transgenic mice [Mus musculus] 
+#   prinzen2009
+#   USE exrps_trum2011 for expression set!!
+#
+# SKI2006: Differential gene expression in pre-clinical and clinical
+#  infection by 3 scrapie strains
+#   skinner2006
+#
+# SKI2008: Differential gene expression in pre-clinical and clinical
+#  infection by 3 scrapie strains, w/RT-PCR and WB confirmation - brain and 
+#  spleen
+#   kim2008
+# 
+# Mouse other organs/cell lines studies from GEO:
+#
+# GSE5844 record: Gene expression imprinting of N2a sublines upon infection 
+# with the prion strain 22L [Mus musculus] 
+#  no pub
+#
+# GSE7229 record: RML Prion and mock-infected murine neuroblastoma cells [Mus 
+# musculus] 
+#   julius2008
+#
+# GSE1803 record: Prion infected ScN2a and GT1 [Mus musculus] 
+#   (greenwood2005)
+#
+# GSE23534 record: Effect of hIAPP aggregation on gene expression by mouse 
+# bone marrow-derived macrophages after 12 hours [Mus musculus] 
+#   no pub
+#
+# GSE7119 record: Gene expression profile of a murin neuroblastoma cell line 
+# infected with the prion strain 22L
+#   (bach2009)
+#
+#
+#  MOUSE: CONSIDER THESE ALSO:
+#
+#  GSE3248 	Contribution of Nuclear and Extranuclear PolyQ to
+#   Neurological Phenotypes in Mouse Models of Huntington’s Disease
+#
+#  GSE10263: Mutant huntingtin's effects on striatal gene expression in mice
+#
+#  reddy2004: Gene expression proﬁles of transcripts in amyloid
+#    precursor protein transgenic mice: up-regulation
+#    of mitochondrial metabolism and apoptotic genes
+#    is an early cellular change in Alzheimer’s disease
+#    reddyh@ohsu.edu - awaiting reply
+#
+#  wu2005(pending lib access)Neurobiol Aging. 2006 Mar;27(3):377-86.
+#    Comparative analysis of cortical gene expression in mouse 
+#    models of Alzheimer's disease
+#    Mailbox unavailable or access denied - <zwu@cephalon.com>
+#
+#  tseveleki2010(pending lib access)Genomics. 2010 Aug;96(2):82-91.
+#    Comparative gene expression analysis in mouse models for 
+#    multiple sclerosis, Alzheimer's disease and stroke for identifying 
+#    commonly regulated and disease-specific gene changes
+#    johnq@jimmy.harvard.edu - rec'd data from tseveleki - "UID" appears to be translated in "raw" data from ArrayExpress website, as genbank IDs
+#      - note that mevfile_external.pdf will tell which field to take
+#
+#  selwood2007(pending lib access): Neurobiol Aging. 2009 Apr;30(4):574-90. #    Gene expression profile of the PDAPP mouse model for Alzheimer's 
+#    disease with and without Apolipoprotein E
+#    gmurphy@stanford.edu - says data is proprietary
+
+
+#################################################################
+#####  Use R in terminal:
+##### Load/save workspace via terminal:
+# in terminal: “sudo R” 
+# (remember: ">q()" to quit)"
+load("/home/adrian/tse_db/meta_analysis/wksp_manag_mouse110415.r")
+save.image("/home/adrian/tse_db/meta_analysis/wksp_manag_mouse110415.r")
+
+#to view:
+print(trans_gpl96[1:50,1:2])
+trans_gpl96[1:50,1:2]
+# Check import (the number in [[]] brackets refers to the objects within the 
+#  gse (most have just one, but gse15222 is split into two)), using
+#  ls(), dim, class, summary, head, print, rownames, colnames...:
+
+
+#################################################################
+#####  (note variable names will be changed to remove "."):
+
+#####In SQL - phpMyAdmin - http://localhost/phpmyadmin:
+CREATE DATABASE amyloidb
+
+
+#################################################################
+##### Load Biobase, GEOquery and MAMA (or, just load via RKWard):
+library("Biobase")
+library("GEOquery")
+library("MAMA") #metaMA
+#library("AnnotationDbi") # SQLForge
+#library("BSDA")
+-
+
+
+#################################################################
+##### Import each GSE/series, as a list of ExpressionSet classes
+#####  and export to SQL:
+#HUMAN:
+gse15222 <- getGEO("GSE15222", GSEMatrix = TRUE)
+gse5281 <- getGEO("GSE5281", GSEMatrix = TRUE)
+gse20295 <- getGEO("GSE20295", GSEMatrix = TRUE)
+gse7621 <- getGEO("GSE7621", GSEMatrix = TRUE)
+-
+#MOUSE:
+gse1840 <- getGEO("GSE1840", GSEMatrix = TRUE)
+gse10310 <- getGEO("GSE10310", GSEMatrix = TRUE)
+gse9914 <- getGEO("GSE9914", GSEMatrix = TRUE)
+gse2867 <- getGEO("GSE2867", GSEMatrix = TRUE)
+gse27588 <- getGEO("GSE27588", GSEMatrix = TRUE)
+gse23182 <- getGEO("GSE23182", GSEMatrix = TRUE)
+gse7207 <- getGEO("GSE7207", GSEMatrix = TRUE)
+gse14499 <- getGEO("GSE14499", GSEMatrix = TRUE)
+gse10908 <- getGEO("GSE10908", GSEMatrix = TRUE)
+trum2011mono <- read.table("/home/adrian/tse_db/data/trumbach/Normalized_data_Augustin_et_al_2011/mono_transgenic_mice_expresso_quantiles_Augustin_et_al_2011.txt", header=TRUE, sep="\t")
+trum2011double <- read.table("/home/adrian/tse_db/data/trumbach/Normalized_data_Augustin_et_al_2011/double_transgenic_mice_expresso_quantiles_Augustin_et_al_2011.txt", header=TRUE, sep="\t")
+# need to rearrange trum2011double GSMs to match exprs to pdata
+#  (note that ID_1261 was originally names AID_1261 to allow proper sort)
+trum2011double <- trum2011double[,sort(colnames(trum2011double))]
+names(trum2011double) <- c("ID_1261", "GSM276563", "GSM276564", "GSM276565", "GSM276566", "GSM276567", "GSM276568", "GSM276569", "GSM276570", "GSM276571", "GSM276572", "GSM276573", "GSM276574", "GSM276575", "GSM276576", "GSM276577", "GSM276578", "GSM276579", "GSM276580")
+# 'a' before 22L only due to R variable req not allowing start w/number  (BUT WHY DON'T I DO IT FOR ski2006??...)
+ski2006 <- read.table("/home/adrian/tse_db/data/skinner/2006paper/ski2006.txt", header=FALSE, sep="\t", col.names=c("probesets", "ME7_19", "ME7_20", "22L_21", "22L_22", "RML_23", "RML_24"))
+ski2008 <- read.table("/home/adrian/tse_db/data/skinner/2008paper/ski2008.txt", header=FALSE, sep="\t", col.names=c("probesets", "mock_10B", "ME7_11B", "a22L_13B", "RML_16B", "mock_9B"))
+-
+# gse19677 <- getGEO("GSE19677", GSEMatrix = TRUE) 
+# THIS DOES NOT WORK BECAUSE OF 'null'!
+# so dowload the two files manually from:
+#   ftp://ftp.ncbi.nih.gov/pub/geo/DATA/SeriesMatrix/GSE19677/
+# and replace 'null' with 'NA' in 6333 file using gedit replace function
+gse19677_6333 <- getGEO(filename="/home/adrian/tse_db/data/GSE19677-GPL6333_series_matrix.txt", GSEMatrix = TRUE)
+gse19677_1261 <- getGEO(filename="/home/adrian/tse_db/data/GSE19677-GPL1261_series_matrix.txt", GSEMatrix = TRUE)
+
+# Check import (the number in [[]] brackets refers to the objects within the 
+#  gse (most have just one, but gse15222 is split into two)), using
+#  dim, class, summary, head, print, rownames, colnames...:
+
+# Check concordance of pData with exprs (should return "[1] TRUE"):
+all(rownames(pData(gse15222[[1]])) == colnames(exprs(gse15222[[1]])))
+
+##### Create exprs and pdata data frames from ExpressionSet
+#####  (note variables dropped in pdata_gse15222_1 to rbind it with _2):
+# HUMAN:
+exprs_gse15222_1 <- data.frame(exprs(gse15222[[1]]))
+exprs_gse15222_2 <- data.frame(exprs(gse15222[[2]]))
+exprs_gse15222 <- cbind(exprs_gse15222_1,exprs_gse15222_2)
+exprs_gse5281 <- data.frame(exprs(gse5281[[1]]))
+exprs_gse20295 <- data.frame(exprs(gse20295[[1]]))
+exprs_gse7621 <- data.frame(exprs(gse7621[[1]]))
+pdata_gse15222_1 <- data.frame(pData(gse15222[[1]]))
+pdata_gse15222_1 <- pdata_gse15222_1[c(-16,-23)]
+pdata_gse15222_2 <- data.frame(pData(gse15222[[2]]))
+pdata_gse15222 <- rbind(pdata_gse15222_1,pdata_gse15222_2)
+pdata_gse5281 <- data.frame(pData(gse5281[[1]]))
+pdata_gse20295 <- data.frame(pData(gse20295[[1]]))
+pdata_gse7621 <- data.frame(pData(gse7621[[1]]))
+rm(exprs_gse15222_1, exprs_gse15222_2, pdata_gse15222_1, pdata_gse15222_2)
+-
+
+# MOUSE:
+exprs_gse1840 <- data.frame(exprs(gse1840[[1]]))
+exprs_gse10310_4134 <- data.frame(exprs(gse10310[[1]]))
+exprs_gse10310_6412 <- data.frame(exprs(gse10310[[2]]))
+exprs_gse19677_1261 <- data.frame(exprs(gse19677_1261))
+exprs_gse19677_6333 <- data.frame(exprs(gse19677_6333))
+exprs_gse9914_1261 <- data.frame(exprs(gse9914[[1]]))
+exprs_gse9914_339 <- data.frame(exprs(gse9914[[2]]))
+exprs_gse2867 <- data.frame(exprs(gse2867[[1]]))
+exprs_gse27588 <- data.frame(exprs(gse27588[[1]]))
+exprs_gse23182 <- data.frame(exprs(gse23182[[1]]))
+exprs_gse7207_339 <- data.frame(exprs(gse7207[[1]]))
+exprs_gse7207_340 <- data.frame(exprs(gse7207[[2]]))
+exprs_gse14499 <- data.frame(exprs(gse14499[[1]]))
+#exprs_gse10908 <- data.frame(exprs(gse10908[[1]])) ; EXCLUDE this and use trum2011 instead...
+exprs_trum2011 <- cbind(trum2011mono,trum2011double[c(-1)])
+exprs_ski2006 <- ski2006
+exprs_ski2008 <- ski2008
+pdata_gse1840 <- data.frame(pData(gse1840[[1]]))
+pdata_gse10310_4134 <- data.frame(pData(gse10310[[1]]))
+pdata_gse10310_6412 <- data.frame(pData(gse10310[[2]]))
+pdata_gse19677_1261 <- data.frame(pData(gse19677_1261))
+pdata_gse19677_6333 <- data.frame(pData(gse19677_6333))
+pdata_gse9914_1261 <- data.frame(pData(gse9914[[1]]))
+pdata_gse9914_339 <- data.frame(pData(gse9914[[2]]))
+pdata_gse2867 <- data.frame(pData(gse2867[[1]]))
+pdata_gse27588 <- data.frame(pData(gse27588[[1]]))
+pdata_gse23182 <- data.frame(pData(gse23182[[1]]))
+pdata_gse7207_339 <- data.frame(pData(gse7207[[1]]))
+pdata_gse7207_340 <- data.frame(pData(gse7207[[2]]))
+pdata_gse14499 <- data.frame(pData(gse14499[[1]]))
+pdata_gse10908 <- data.frame(pData(gse10908[[1]]))
+# pdata_ski2006 is created below
+# pdata_ski2008 is created below
+-
+
+##### Create new exprs variables: 
+exprs_gse15222$ID_2700 <- rownames(exprs_gse15222)
+exprs_gse5281$ID_570 <- rownames(exprs_gse5281)
+exprs_gse20295$ID_570 <- rownames(exprs_gse20295)
+exprs_gse7621$ID_570 <- rownames(exprs_gse7621)
+-
+exprs_gse1840$ID_1487 <- rownames(exprs_gse1840)
+exprs_gse10310_4134$ID_4134 <- rownames(exprs_gse10310_4134)
+exprs_gse10310_6412$ID_6412 <- rownames(exprs_gse10310_6412)
+exprs_gse19677_1261$ID_1261 <- rownames(exprs_gse19677_1261)
+exprs_gse19677_6333$ID_6333 <- rownames(exprs_gse19677_6333)
+exprs_gse9914_1261$ID_1261 <- rownames(exprs_gse9914_1261)
+exprs_gse9914_339$ID_339 <- rownames(exprs_gse9914_339)
+exprs_gse2867$ID_339 <- rownames(exprs_gse2867)
+exprs_gse27588$ID_11094 <- rownames(exprs_gse27588)
+exprs_gse23182$ID_1261 <- rownames(exprs_gse23182)
+exprs_gse7207_339$ID_339 <- rownames(exprs_gse7207_339)
+exprs_gse7207_340$ID_340 <- rownames(exprs_gse7207_340)
+exprs_gse14499$ID_1261 <- rownames(exprs_gse14499)
+#exprs_gse10908$ID_1261 <- rownames(exprs_gse10908)
+exprs_ski2006$ID_bmap <- exprs_ski2006$probesets
+rownames(exprs_ski2006) <- exprs_ski2006$probesets
+exprs_ski2006$probesets<-NULL
+exprs_ski2008$ID_339 <- exprs_ski2008$probesets
+rownames(exprs_ski2008) <- exprs_ski2008$probesets
+exprs_ski2008$probesets<-NULL
+-
+
+###### Create new pdata variables:
+
+###### for HUMAN:
+just_vars_hum <- c('sampleid', 'sample', 'study', 'disease1', 'sex1', 'age1', 'taxid', 'platform', 'normlzn', 'anatomy1', 'anatomy2', 'comment', 'amyloid')
+
+#summary(pdata_gse15222)
+#colnames(pdata_gse15222)
+pdata_gse15222$sampleid<-pdata_gse15222$geo_accession
+pdata_gse15222$sample<-pdata_gse15222$title
+pdata_gse15222$study<-"gse15222"
+pdata_gse15222$disease1<-pdata_gse15222$source_name_ch1
+pdata_gse15222$sex1<-pdata_gse15222$characteristics_ch1.1
+pdata_gse15222$age1<-pdata_gse15222$characteristics_ch1.2
+pdata_gse15222$taxid<-pdata_gse15222$taxid_ch1
+pdata_gse15222$platform<-pdata_gse15222$platform_id
+pdata_gse15222$normlzn<-pdata_gse15222$data_processing
+pdata_gse15222$anatomy1<-pdata_gse15222$source_name_ch1
+pdata_gse15222$anatomy2<-pdata_gse15222$description        
+pdata_gse15222$comment<-"webster2009, 176 Parkinson pts, 187 control pts, rank invariant normalization to extract +/- log10 transformation"
+#summary(pdata_gse15222$source_name_ch1)
+#Alzheimer's Disease frozen cortical tissue = 176 
+#neuropathologically normal frozen frontal cortex = 40 
+#neuropathologically normal frozen frontal temporal cortex = 3 
+#neuropathologically normal frozen parietal cortex = 3 
+#neuropathologically normal frozen temporal cortex = 135 
+#neuropathologically normal frozen unknown cortex = 2 
+#neuropathologically normal frozen unknown region cortex = 4 
+pdata_gse15222$amyloid[substr(pdata_gse15222$source_name_ch1,1,9)=="Alzheimer"] <- 1
+pdata_gse15222$amyloid[substr(pdata_gse15222$source_name_ch1,21,26)=="normal"] <- 0
+pdata_gse15222 <- pdata_gse15222[just_vars_hum]
+-
+
+#summary(pdata_gse5281)
+pdata_gse5281$sampleid<-pdata_gse5281$geo_accession
+pdata_gse5281$sample<-pdata_gse5281$title
+pdata_gse5281$study<-"gse5281"
+pdata_gse5281$disease1<-pdata_gse5281$characteristics_ch1.8
+pdata_gse5281$sex1<-pdata_gse5281$characteristics_ch1.9
+pdata_gse5281$age1<-pdata_gse5281$characteristics_ch1.11
+pdata_gse5281$taxid<-pdata_gse5281$taxid_ch1
+pdata_gse5281$platform<-pdata_gse5281$platform_id
+pdata_gse5281$normlzn<-pdata_gse5281$data_processing
+pdata_gse5281$anatomy1<-pdata_gse5281$source_name_ch1
+pdata_gse5281$anatomy2<-pdata_gse5281$characteristics_ch1.4
+pdata_gse5281$comment<-"liang2008, 23 Alzhiemer pts, 13 control pts, MAS5.0 normalization target scaling to 150"
+#summary(pdata_gse5281$characteristics_ch1.8)
+#disease state: Alzheimer's Disease = 42
+#Disease State: Alzheimer's Disease  = 45 
+#Disease State: normal = 74 
+pdata_gse5281$amyloid[substr(pdata_gse5281$characteristics_ch1.8,16,24)=="Alzheimer"] <- 1
+pdata_gse5281$amyloid[substr(pdata_gse5281$characteristics_ch1.8,16,21)=="normal"] <- 0
+pdata_gse5281 <- pdata_gse5281[just_vars_hum]
+-
+
+#summary(pdata_gse20295)
+pdata_gse20295$sampleid<-pdata_gse20295$geo_accession
+pdata_gse20295$sample<-pdata_gse20295$title
+pdata_gse20295$study<-"gse20295"
+pdata_gse20295$disease1<-pdata_gse20295$characteristics_ch1
+pdata_gse20295$sex1<-pdata_gse20295$characteristics_ch1.2
+pdata_gse20295$age1<-pdata_gse20295$characteristics_ch1.1
+pdata_gse20295$taxid<-pdata_gse20295$taxid_ch1
+pdata_gse20295$platform<-pdata_gse20295$platform_id
+pdata_gse20295$normlzn<-pdata_gse20295$data_processing
+pdata_gse20295$anatomy1<-pdata_gse20295$source_name_ch1
+pdata_gse20295$anatomy2<-pdata_gse20295$characteristics_ch1.3
+pdata_gse20295$comment<-"zhang2005, 15 Parkinson pts, 15 control pts, normalized either by MAS5.0 or - To obtain the most stringent normalization - Robust Multichip Analysis (Irizarry et al 2003) further normalized to mean control"
+#summary(pdata_gse20295$characteristics_ch1)
+#disease state: control =15
+#disease state: Control = 38 
+#disease state: Parkinson's disease =14
+#disease state: Parkinsons disease = 26 
+pdata_gse20295$amyloid[substr(pdata_gse20295$characteristics_ch1,16,24)=="Parkinson"] <- 1
+pdata_gse20295$amyloid[substr(pdata_gse20295$characteristics_ch1,17,22)=="ontrol"] <- 0
+pdata_gse20295 <- pdata_gse20295[just_vars_hum]
+-
+
+#summary(pdata_gse7621)
+pdata_gse7621$sampleid<-pdata_gse7621$geo_accession
+pdata_gse7621$sample<-pdata_gse7621$title
+pdata_gse7621$study<-"gse7621"
+pdata_gse7621$disease1<-pdata_gse7621$characteristics_ch1
+pdata_gse7621$sex1<-pdata_gse7621$characteristics_ch1.1
+pdata_gse7621$age1<-NA
+pdata_gse7621$taxid<-pdata_gse7621$taxid_ch1
+pdata_gse7621$platform<-pdata_gse7621$platform_id
+pdata_gse7621$normlzn<-pdata_gse7621$data_processing
+pdata_gse7621$anatomy1<-pdata_gse7621$source_name_ch1
+pdata_gse7621$anatomy2<-pdata_gse7621$description
+pdata_gse7621$comment<-"lesnick2007, 16 Parkinson pts, 9 control pts, normalized w/MAS5.0 w/Affymetrix default settings & global scaling & trimmed mean target intensity set to 100"
+#summary(pdata_gse7621$characteristics_ch1)
+#Old Control =9
+#Parkinson's Disease = 16 
+pdata_gse7621$amyloid[substr(pdata_gse7621$characteristics_ch1,1,9)=="Parkinson"] <- 1
+pdata_gse7621$amyloid[substr(pdata_gse7621$characteristics_ch1,5,11)=="Control"] <- 0
+pdata_gse7621 <- pdata_gse7621[just_vars_hum]
+-
+
+###### for MOUSE:
+just_vars_mous <- c('sampleid', 'sample', 'study', 'disease1', 'sex1', 'age1', 'taxid', 'platform', 'normlzn', 'anatomy1', 'anatomy2', 'anim_model', 'anim_strain', 'innoc_strain', 'chal_strain', 'innoc_rout', 'chal_rout', 'dpi', 'comment', 'amyloid', 't1or2', 'studya', 'studyb', 'studyc', 'studyd', 'studye', 'studyf', 'nofa', 'nofb', 'nofc', 'nofd', 'nofe', 'noff')
+
+#summary(pdata_gse1840)
+pdata_gse1840$sampleid<-pdata_gse1840$geo_accession
+pdata_gse1840$sample<-pdata_gse1840$title
+pdata_gse1840$study<-"gse1840"
+pdata_gse1840$disease1<-"log2ratio scrapie:mock infected"
+pdata_gse1840$sex1<-NA
+pdata_gse1840$age1<-NA
+pdata_gse1840$taxid<-pdata_gse1840$taxid_ch1
+pdata_gse1840$platform<-pdata_gse1840$platform_id
+pdata_gse1840$normlzn<-"Intensity values normalized w/linear regression smoothing algorithm (Loess best-ﬁt) over individual array sub-grids"
+pdata_gse1840$anatomy1<-"brain"
+pdata_gse1840$anatomy2<-"whole brain"
+pdata_gse1840$anim_model<-"mouse scrapie"
+pdata_gse1840$anim_strain<-"C57Bl/6"
+pdata_gse1840$innoc_strain<-NA
+pdata_gse1840$chal_strain<-paste("brain homogenate from mouse infected with ", substr(pdata_gse1840$title,1,3), sep="")
+pdata_gse1840$innoc_rout<-NA
+pdata_gse1840$chal_rout<-"intracerebral"
+pdata_gse1840$dpi<-pdata_gse1840$title
+pdata_gse1840$comment<-"booth2004, ONLY log2 ratios of two color arrays infected vs mock-infected (age matched) (54 pairs), C57Bl/6 mice, me7 & 79a prpsc strains, 21 & 100 & end(clin dz) dpi, intracerebral"
+pdata_gse1840$amyloid<-1
+pdata_gse1840$t1or2<-1
+# study breakdown by strain and dpi:
+pdata_gse1840$studya<-0
+pdata_gse1840$studyb<-0
+pdata_gse1840$studyc<-0
+pdata_gse1840$studyd<-0
+pdata_gse1840$studye<-0
+pdata_gse1840$studyf<-0
+pdata_gse1840$studya[(substr(pdata_gse1840$sample,1,3)=="ME7") & (substr(pdata_gse1840$sample,5,7)=="21d")]<-1
+pdata_gse1840$studyb[(substr(pdata_gse1840$sample,1,3)=="ME7") & (substr(pdata_gse1840$sample,5,7)=="100")]<-1
+pdata_gse1840$studyc[(substr(pdata_gse1840$sample,1,3)=="ME7") & (substr(pdata_gse1840$sample,5,7)=="end")]<-1
+pdata_gse1840$studyd[(substr(pdata_gse1840$sample,1,3)=="79a") & (substr(pdata_gse1840$sample,5,7)=="21d")]<-1
+pdata_gse1840$studye[(substr(pdata_gse1840$sample,1,3)=="79a") & (substr(pdata_gse1840$sample,5,7)=="100")]<-1
+pdata_gse1840$studyf[(substr(pdata_gse1840$sample,1,3)=="79a") & (substr(pdata_gse1840$sample,5,7)=="end")]<-1
+pdata_gse1840$nofa<-sum(pdata_gse1840$studya==1)
+pdata_gse1840$nofb<-sum(pdata_gse1840$studyb==1)
+pdata_gse1840$nofc<-sum(pdata_gse1840$studyc==1)
+pdata_gse1840$nofd<-sum(pdata_gse1840$studyd==1)
+pdata_gse1840$nofe<-sum(pdata_gse1840$studye==1)
+pdata_gse1840$noff<-sum(pdata_gse1840$studyf==1)
+-
+pdata_gse1840 <- pdata_gse1840[just_vars_mous]
+-
+
+#summary(pdata_gse10310_4134)
+pdata_gse10310_4134$sampleid<-pdata_gse10310_4134$geo_accession
+pdata_gse10310_4134$sample<-pdata_gse10310_4134$title
+pdata_gse10310_4134$study<-"gse10310_4134"
+pdata_gse10310_4134$disease1<-"log2ratio scrapie:mock infected"
+pdata_gse10310_4134$sex1<-"female"
+pdata_gse10310_4134$age1<-"150 days old"
+pdata_gse10310_4134$taxid<-pdata_gse10310_4134$taxid_ch1
+pdata_gse10310_4134$platform<-pdata_gse10310_4134$platform_id
+pdata_gse10310_4134$normlzn<-pdata_gse10310_4134$data_processing
+pdata_gse10310_4134$anatomy1<-"brain"
+pdata_gse10310_4134$anatomy2<-"whole brain"
+pdata_gse10310_4134$anim_model<-"mouse scrapie"
+pdata_gse10310_4134$anim_strain<-"C57Bl/6"
+pdata_gse10310_4134$innoc_strain<-paste("brain homogenate from mouse infected with ", substr(pdata_gse10310_4134$title,1,3), sep="")
+pdata_gse10310_4134$chal_strain<-NA
+pdata_gse10310_4134$innoc_rout<-"intracerebral"
+pdata_gse10310_4134$chal_rout<-NA
+pdata_gse10310_4134$dpi<-"onset of clinical disease"
+pdata_gse10310_4134$comment<-"sorensen2008, ONLY log2 ratios of two color arrays infected vs mock-infected (age matched), gpl4134 (6 pairs) has C57Bl/6 mice infected w/RML scrapie, gpl6412 (33 pairs) has C57Bl/6 or VM mice infected w/22A or ME7 or 79A scrapie, intracerebral, sac at clin dx endpoint"
+pdata_gse10310_4134$amyloid <- 1
+pdata_gse10310_4134$t1or2<-1
+pdata_gse10310_4134$studya<-1
+pdata_gse10310_4134$studyb<-0
+pdata_gse10310_4134$studyc<-0
+pdata_gse10310_4134$studyd<-0
+pdata_gse10310_4134$studye<-0
+pdata_gse10310_4134$studyf<-0
+pdata_gse10310_4134$nofa<-sum(pdata_gse10310_4134$studya==1)
+pdata_gse10310_4134$nofb<-sum(pdata_gse10310_4134$studyb==1)
+pdata_gse10310_4134$nofc<-sum(pdata_gse10310_4134$studyc==1)
+pdata_gse10310_4134$nofd<-sum(pdata_gse10310_4134$studyd==1)
+pdata_gse10310_4134$nofe<-sum(pdata_gse10310_4134$studye==1)
+pdata_gse10310_4134$noff<-sum(pdata_gse10310_4134$studyf==1)
+-
+pdata_gse10310_4134 <- pdata_gse10310_4134[just_vars_mous]
+-
+
+#summary(pdata_gse10310_6412)
+pdata_gse10310_6412$sampleid<-pdata_gse10310_6412$geo_accession
+pdata_gse10310_6412$sample<-pdata_gse10310_6412$title
+pdata_gse10310_6412$study<-"gse10310_6412"
+pdata_gse10310_6412$disease1<-pdata_gse10310_6412$source_name_ch1
+pdata_gse10310_6412$sex1<-"female"
+pdata_gse10310_6412$age1<-"160 days old"
+pdata_gse10310_6412$taxid<-pdata_gse10310_6412$taxid_ch1
+pdata_gse10310_6412$platform<-pdata_gse10310_6412$platform_id
+pdata_gse10310_6412$normlzn<-"LOWESS normalized, background subtracted VALUE data obtained from log2 of processed Red signal/processed Green signal. GeneTraffic software was used"
+pdata_gse10310_6412$anatomy1<-"brain"
+pdata_gse10310_6412$anatomy2<-"whole brain"
+pdata_gse10310_6412$anim_model<-"mouse scrapie"
+pdata_gse10310_6412$anim_strain<-"C57Bl/6"
+pdata_gse10310_6412$anim_strain[substr(pdata_gse10310_6412$sample,4,5)=="VM"]<-"VM"
+pdata_gse10310_6412$innoc_strain<-paste("brain homogenate from mouse infected with ", substr(pdata_gse10310_6412$title,1,3), sep="")
+pdata_gse10310_6412$chal_strain<-NA
+pdata_gse10310_6412$innoc_rout<-"intracerebral"
+pdata_gse10310_6412$chal_rout<-NA
+pdata_gse10310_6412$dpi<-pdata_gse10310_6412$source_name_ch1
+pdata_gse10310_6412$comment<-"sorensen2008, ONLY log2 ratios of two color arrays infected vs mock-infected (age matched), gpl4134 (6 pairs) has C57Bl/6 mice infected w/RML scrapie, gpl6412 (33 pairs) has C57Bl/6 or VM mice infected w/22A or ME7 or 79A scrapie, intracerebral"
+pdata_gse10310_6412$amyloid <- 1
+pdata_gse10310_6412$t1or2<-1
+# study breakdown by scrapie strain and mouse strain
+pdata_gse10310_6412$studya<-0
+pdata_gse10310_6412$studyb<-0
+pdata_gse10310_6412$studyc<-0
+pdata_gse10310_6412$studyd<-0
+pdata_gse10310_6412$studye<-0
+pdata_gse10310_6412$studyf<-0
+pdata_gse10310_6412$studya[substr(pdata_gse10310_6412$sample,1,4)=="Me7_"]<-1
+pdata_gse10310_6412$studyb[substr(pdata_gse10310_6412$sample,1,4)=="79a_"]<-1
+pdata_gse10310_6412$studyc[substr(pdata_gse10310_6412$sample,1,4)=="22A_"]<-1
+pdata_gse10310_6412$studyd[substr(pdata_gse10310_6412$sample,1,4)=="22AV"]<-1
+pdata_gse10310_6412$nofa<-sum(pdata_gse10310_6412$studya==1)
+pdata_gse10310_6412$nofb<-sum(pdata_gse10310_6412$studyb==1)
+pdata_gse10310_6412$nofc<-sum(pdata_gse10310_6412$studyc==1)
+pdata_gse10310_6412$nofd<-sum(pdata_gse10310_6412$studyd==1)
+pdata_gse10310_6412$nofe<-sum(pdata_gse10310_6412$studye==1)
+pdata_gse10310_6412$noff<-sum(pdata_gse10310_6412$studyf==1)
+-
+pdata_gse10310_6412 <- pdata_gse10310_6412[just_vars_mous]
+-
+
+#summary(pdata_gse19677_1261)
+pdata_gse19677_1261$sampleid<-pdata_gse19677_1261$geo_accession
+pdata_gse19677_1261$sample<-pdata_gse19677_1261$title
+pdata_gse19677_1261$study<-"gse19677_1261"
+pdata_gse19677_1261$disease1<-pdata_gse19677_1261$characteristics_ch1.2
+pdata_gse19677_1261$sex1<-NA
+pdata_gse19677_1261$age1<-pdata_gse19677_1261$characteristics_ch1
+pdata_gse19677_1261$taxid<-pdata_gse19677_1261$taxid_ch1
+pdata_gse19677_1261$platform<-pdata_gse19677_1261$platform_id
+pdata_gse19677_1261$normlzn<-pdata_gse19677_1261$data_processing
+pdata_gse19677_1261$anatomy1<-"brain"
+pdata_gse19677_1261$anatomy2<-"striatum"
+pdata_gse19677_1261$anim_model<-"mouse Huntington YAC128"
+pdata_gse19677_1261$anim_strain<-"YAC128 and WT littermates"
+pdata_gse19677_1261$innoc_strain<-NA
+pdata_gse19677_1261$chal_strain<-NA
+pdata_gse19677_1261$innoc_rout<-NA
+pdata_gse19677_1261$chal_rout<-NA
+pdata_gse19677_1261$dpi<-NA
+pdata_gse19677_1261$comment<-"becanovic2010, 10 YAC128 Huntington model mice, 8 WT mice, sacd at 12 & 24 months; 12 month: 4 YAC128 $ 4 WT. 24 month: 6 YAC128 & 4 WT. SUPPOSEDLY parallel on 2 diff array platforms - but only 1261 agrees with this, not 6333"
+pdata_gse19677_1261$amyloid[substr(pdata_gse19677_1261
+   $characteristics_ch1.2,11,16)=="YAC128"] <- 1
+pdata_gse19677_1261$amyloid[substr(pdata_gse19677_1261
+   $characteristics_ch1.2,11,12)=="WT"] <- 0
+pdata_gse19677_1261$t1or2<-2
+# study breakdown by age:
+pdata_gse19677_1261$studya<-0
+pdata_gse19677_1261$studyb<-0
+pdata_gse19677_1261$studyc<-0
+pdata_gse19677_1261$studyd<-0
+pdata_gse19677_1261$studye<-0
+pdata_gse19677_1261$studyf<-0
+pdata_gse19677_1261$studya[pdata_gse19677_1261$age1=="age: 12 months"]<-1
+pdata_gse19677_1261$studyb[pdata_gse19677_1261$age1=="age: 24 months"]<-1
+pdata_gse19677_1261$nofa<-sum(pdata_gse19677_1261$studya==1)
+pdata_gse19677_1261$nofb<-sum(pdata_gse19677_1261$studyb==1)
+pdata_gse19677_1261$nofc<-sum(pdata_gse19677_1261$studyc==1)
+pdata_gse19677_1261$nofd<-sum(pdata_gse19677_1261$studyd==1)
+pdata_gse19677_1261$nofe<-sum(pdata_gse19677_1261$studye==1)
+pdata_gse19677_1261$noff<-sum(pdata_gse19677_1261$studyf==1)
+-
+pdata_gse19677_1261 <- pdata_gse19677_1261[just_vars_mous]
+-
+
+#summary(pdata_gse19677_6333)
+# DO NOT USE THIS STUDY
+pdata_gse19677_6333$sampleid<-pdata_gse19677_6333$geo_accession
+pdata_gse19677_6333$sample<-pdata_gse19677_6333$title
+pdata_gse19677_6333$study<-"gse19677_6333"
+pdata_gse19677_6333$disease1<-pdata_gse19677_6333$characteristics_ch1.2
+pdata_gse19677_6333$sex1<-NA
+pdata_gse19677_6333$age1<-pdata_gse19677_6333$characteristics_ch1
+pdata_gse19677_6333$taxid<-pdata_gse19677_6333$taxid_ch1
+pdata_gse19677_6333$platform<-pdata_gse19677_6333$platform_id
+pdata_gse19677_6333$normlzn<-pdata_gse19677_6333$data_processing
+pdata_gse19677_6333$anatomy1<-"brain"
+pdata_gse19677_6333$anatomy2<-"striatum"
+pdata_gse19677_6333$anim_model<-"mouse Huntington YAC128"
+pdata_gse19677_6333$anim_strain<-"YAC128 and WT littermates"
+pdata_gse19677_6333$innoc_strain<-NA
+pdata_gse19677_6333$chal_strain<-NA
+pdata_gse19677_6333$innoc_rout<-NA
+pdata_gse19677_6333$chal_rout<-NA
+pdata_gse19677_6333$dpi<-NA
+pdata_gse19677_6333$comment<-"becanovic2010, 10 YAC128 Huntington model mice, 8 WT mice, sacd at 12 & 24 months; 12 month: 4 YAC128 $ 4 WT. 24 month: 6 YAC128 & 4 WT. SUPPOSEDLY parallel on 2 diff array platforms - but only 1261 agrees with this, not 6333"
+pdata_gse19677_6333$amyloid[substr(pdata_gse19677_6333
+   $characteristics_ch1.2,11,16)=="YAC128"] <- 1
+pdata_gse19677_6333$amyloid[substr(pdata_gse19677_6333
+   $characteristics_ch1.2,11,12)=="WT"] <- 0
+pdata_gse19677_6333$t1or2<-2
+# study breakdown by age:
+pdata_gse19677_6333$studya<-0
+pdata_gse19677_6333$studyb<-0
+pdata_gse19677_6333$studyc<-0
+pdata_gse19677_6333$studyd<-0
+pdata_gse19677_6333$studye<-0
+pdata_gse19677_6333$studyf<-0
+pdata_gse19677_6333$studya[pdata_gse19677_6333$age1=="age: 12 months"]<-1
+pdata_gse19677_6333$studyb[pdata_gse19677_6333$age1=="age: 24 months"]<-1
+pdata_gse19677_6333$nofa<-sum(pdata_gse19677_6333$studya==1)
+pdata_gse19677_6333$nofb<-sum(pdata_gse19677_6333$studyb==1)
+pdata_gse19677_6333$nofc<-sum(pdata_gse19677_6333$studyc==1)
+pdata_gse19677_6333$nofd<-sum(pdata_gse19677_6333$studyd==1)
+pdata_gse19677_6333$nofe<-sum(pdata_gse19677_6333$studye==1)
+pdata_gse19677_6333$noff<-sum(pdata_gse19677_6333$studyf==1)
+-
+pdata_gse19677_6333 <- pdata_gse19677_6333[just_vars_mous]
+-
+
+#summary(pdata_gse9914_1261)
+pdata_gse9914_1261$sampleid<-pdata_gse9914_1261$geo_accession
+pdata_gse9914_1261$sample<-pdata_gse9914_1261$title
+pdata_gse9914_1261$study<-"gse9914_1261"
+pdata_gse9914_1261$disease1<-pdata_gse9914_1261$source_name_ch1
+pdata_gse9914_1261$sex1<-"female"
+pdata_gse9914_1261$age1<-"5 weeks"
+pdata_gse9914_1261$taxid<-pdata_gse9914_1261$taxid_ch1
+pdata_gse9914_1261$platform<-pdata_gse9914_1261$platform_id
+pdata_gse9914_1261$normlzn<-"data normalized by GCRMA & a data reduction step extracted complete subset of Mouse Expression Array 430A probe sets from the Mouse Genome 430 2.0 Array"
+pdata_gse9914_1261$anatomy1<-"brain"
+pdata_gse9914_1261$anatomy2<-"cerebellum"
+pdata_gse9914_1261$anim_model<-"mouse SCA7"
+pdata_gse9914_1261$anim_strain<-"C57Bl/6J"
+pdata_gse9914_1261$innoc_strain<-NA
+pdata_gse9914_1261$chal_strain<-NA
+pdata_gse9914_1261$innoc_rout<-NA
+pdata_gse9914_1261$chal_rout<-NA
+pdata_gse9914_1261$dpi<-NA
+pdata_gse9914_1261$comment<-"gatchel2008, 5 SCA7 knock-in mice, 5 SCA7 WT mice"
+pdata_gse9914_1261$amyloid[substr(pdata_gse9914_1261$source_name_ch1, 18, 25)=="knock-in"] <- 1
+pdata_gse9914_1261$amyloid[substr(pdata_gse9914_1261$source_name_ch1, 18, 26)=="wild type"] <- 0
+pdata_gse9914_1261$t1or2<-2
+pdata_gse9914_1261$studya<-1
+pdata_gse9914_1261$studyb<-0
+pdata_gse9914_1261$studyc<-0
+pdata_gse9914_1261$studyd<-0
+pdata_gse9914_1261$studye<-0
+pdata_gse9914_1261$studyf<-0
+pdata_gse9914_1261$nofa<-sum(pdata_gse9914_1261$studya==1)
+pdata_gse9914_1261$nofb<-sum(pdata_gse9914_1261$studyb==1)
+pdata_gse9914_1261$nofc<-sum(pdata_gse9914_1261$studyc==1)
+pdata_gse9914_1261$nofd<-sum(pdata_gse9914_1261$studyd==1)
+pdata_gse9914_1261$nofe<-sum(pdata_gse9914_1261$studye==1)
+pdata_gse9914_1261$noff<-sum(pdata_gse9914_1261$studyf==1)
+-
+pdata_gse9914_1261 <- pdata_gse9914_1261[just_vars_mous]
+-
+
+#summary(pdata_gse9914_339)
+pdata_gse9914_339$sampleid<-pdata_gse9914_339$geo_accession
+pdata_gse9914_339$sample<-pdata_gse9914_339$title
+pdata_gse9914_339$study<-"gse9914_339"
+pdata_gse9914_339$disease1<-pdata_gse9914_339$source_name_ch1
+pdata_gse9914_339$sex1<-"female"
+pdata_gse9914_339$age1<-pdata_gse9914_339$characteristics_ch1.2
+pdata_gse9914_339$taxid<-pdata_gse9914_339$taxid_ch1
+pdata_gse9914_339$platform<-pdata_gse9914_339$platform_id
+pdata_gse9914_339$normlzn<-"data normalized by GCRMA & a data reduction step extracted complete subset of Mouse Expression Array 430A probe sets from the Mouse Genome 430 2.0 Array"
+pdata_gse9914_339$anatomy1<-"brain"
+pdata_gse9914_339$anatomy2<-"cerebellum"
+pdata_gse9914_339$anim_model<-"mouse SCA1"
+pdata_gse9914_339$anim_strain<-"C57Bl/6J"
+pdata_gse9914_339$innoc_strain<-NA
+pdata_gse9914_339$chal_strain<-NA
+pdata_gse9914_339$innoc_rout<-NA
+pdata_gse9914_339$chal_rout<-NA
+pdata_gse9914_339$dpi<-NA
+pdata_gse9914_339$comment<-"gatchel2008, 6 SCA1 knock-in mice, 6 SCA1 WT mice, split by 4, 9, 12 weeks"
+pdata_gse9914_339$amyloid[substr(pdata_gse9914_339$source_name_ch1, 18, 22)=="knock"] <- 1
+pdata_gse9914_339$amyloid[substr(pdata_gse9914_339$source_name_ch1, 18, 21)=="wild"] <- 0
+pdata_gse9914_339$t1or2<-2
+# study breakdown by age
+pdata_gse9914_339$studya<-0
+pdata_gse9914_339$studyb<-0
+pdata_gse9914_339$studyc<-0
+pdata_gse9914_339$studyd<-0
+pdata_gse9914_339$studye<-0
+pdata_gse9914_339$studyf<-0
+pdata_gse9914_339$studya[pdata_gse9914_339$age1=="age: 4 weeks"]<-1
+pdata_gse9914_339$studyb[pdata_gse9914_339$age1=="age: 9 weeks"]<-1
+pdata_gse9914_339$studyc[pdata_gse9914_339$age1=="age: 12 weeks"]<-1
+pdata_gse9914_339$nofa<-sum(pdata_gse9914_339$studya==1)
+pdata_gse9914_339$nofb<-sum(pdata_gse9914_339$studyb==1)
+pdata_gse9914_339$nofc<-sum(pdata_gse9914_339$studyc==1)
+pdata_gse9914_339$nofd<-sum(pdata_gse9914_339$studyd==1)
+pdata_gse9914_339$nofe<-sum(pdata_gse9914_339$studye==1)
+pdata_gse9914_339$noff<-sum(pdata_gse9914_339$studyf==1)
+-
+pdata_gse9914_339 <- pdata_gse9914_339[just_vars_mous]
+-
+
+#summary(pdata_gse2867)
+pdata_gse2867$sampleid<-pdata_gse2867$geo_accession
+pdata_gse2867$sample<-pdata_gse2867$title
+pdata_gse2867$study<-"gse2867"
+pdata_gse2867$disease1<-pdata_gse2867$description
+pdata_gse2867$sex1<-NA
+pdata_gse2867$age1<-pdata_gse2867$description.1
+pdata_gse2867$taxid<-pdata_gse2867$taxid_ch1
+pdata_gse2867$platform<-pdata_gse2867$platform_id
+pdata_gse2867$normlzn<-NA
+pdata_gse2867$anatomy1<-"brain"
+pdata_gse2867$anatomy2[substr(pdata_gse2867$description, 16, 17)=="ce"]<-"cerebellum"
+pdata_gse2867$anatomy2[substr(pdata_gse2867$description, 15, 16)=="ce"]<-"cerebellum"
+pdata_gse2867$anatomy2[substr(pdata_gse2867$description, 17, 18)=="ce"]<-"cerebellum"
+pdata_gse2867$anatomy2[substr(pdata_gse2867$description, 15, 16)=="fo"]<-"forebrain"
+pdata_gse2867$anatomy2[substr(pdata_gse2867$description, 17, 18)=="fo"]<-"forebrain"
+pdata_gse2867$anim_model<-"mouse SCA1"
+pdata_gse2867$anim_strain<-NA
+pdata_gse2867$innoc_strain<-NA
+pdata_gse2867$chal_strain<-NA
+pdata_gse2867$innoc_rout<-NA
+pdata_gse2867$chal_rout<-NA
+pdata_gse2867$dpi<-NA
+pdata_gse2867$comment<-"no pub, 10 SCA1 mice, 10 WT mice, split by 4, 12 weeks & cerebellum, forebrain"
+pdata_gse2867$amyloid[substr(pdata_gse2867$description, 1, 5)=="knock"] <- 1
+pdata_gse2867$amyloid[substr(pdata_gse2867$description, 1, 4)=="wild"] <- 0
+pdata_gse2867$t1or2<-2
+# study breakdown by age and brain region:
+pdata_gse2867$studya<-0
+pdata_gse2867$studyb<-0
+pdata_gse2867$studyc<-0
+pdata_gse2867$studyd<-0
+pdata_gse2867$studye<-0
+pdata_gse2867$studyf<-0
+pdata_gse2867$studya[(substr(pdata_gse2867$age1,42,43)=="4.") & (substr(pdata_gse2867$anatomy2,1,4)=="fore")]<-1
+pdata_gse2867$studyb[(substr(pdata_gse2867$age1,42,43)=="4.") & (substr(pdata_gse2867$anatomy2,1,4)=="cere")]<-1
+pdata_gse2867$studyc[(substr(pdata_gse2867$age1,42,43)=="11") & (substr(pdata_gse2867$anatomy2,1,4)=="fore")]<-1
+pdata_gse2867$studyd[(substr(pdata_gse2867$age1,42,43)=="11") & (substr(pdata_gse2867$anatomy2,1,4)=="cere")]<-1
+pdata_gse2867$nofa<-sum(pdata_gse2867$studya==1)
+pdata_gse2867$nofb<-sum(pdata_gse2867$studyb==1)
+pdata_gse2867$nofc<-sum(pdata_gse2867$studyc==1)
+pdata_gse2867$nofd<-sum(pdata_gse2867$studyd==1)
+pdata_gse2867$nofe<-sum(pdata_gse2867$studye==1)
+pdata_gse2867$noff<-sum(pdata_gse2867$studyf==1)
+-
+pdata_gse2867 <- pdata_gse2867[just_vars_mous]
+-
+
+#summary(pdata_gse27588)
+pdata_gse27588$sampleid<-pdata_gse27588$geo_accession
+pdata_gse27588$sample<-pdata_gse27588$title
+pdata_gse27588$study<-"gse27588"
+pdata_gse27588$disease1<-pdata_gse27588$source_name_ch1
+pdata_gse27588$sex1<-NA
+pdata_gse27588$age1<-pdata_gse27588$source_name_ch1
+pdata_gse27588$taxid<-pdata_gse27588$taxid_ch1
+pdata_gse27588$platform<-pdata_gse27588$platform_id
+pdata_gse27588$normlzn<-pdata_gse27588$data_processing
+pdata_gse27588$anatomy1<-"brain"
+pdata_gse27588$anatomy2<-"striatum"
+pdata_gse27588$anim_model<-"mouse HD transgenic"
+pdata_gse27588$anim_strain<-NA
+pdata_gse27588$innoc_strain<-NA
+pdata_gse27588$chal_strain<-NA
+pdata_gse27588$innoc_rout<-NA
+pdata_gse27588$chal_rout<-NA
+pdata_gse27588$dpi<-NA
+pdata_gse27588$comment<-"no pub, HD transgenic mice: Four groups, pre-symptomatic HD mice (6 weeks old), WT control (6 weeks), post symptomatic HD (16 weeks), and WT control (16 weeks), were hybridized and analyzed using the GLYCOv2 array. Each group was hybridized in triplicate"
+pdata_gse27588$amyloid[substr(pdata_gse27588$source_name_ch1, 24, 26)=="Hun"] <- 1
+pdata_gse27588$amyloid[substr(pdata_gse27588$source_name_ch1, 24, 26)=="Wil"] <- 0
+pdata_gse27588$t1or2<-2
+# study breakdown by age:
+pdata_gse27588$studya<-0
+pdata_gse27588$studyb<-0
+pdata_gse27588$studyc<-0
+pdata_gse27588$studyd<-0
+pdata_gse27588$studye<-0
+pdata_gse27588$studyf<-0
+pdata_gse27588$studya[(substr(pdata_gse27588$age1,24,25)=="Hu") & (substr(pdata_gse27588$age1,60,61)=="6 ")]<-1
+pdata_gse27588$studya[(substr(pdata_gse27588$age1,24,25)=="Wi") & (substr(pdata_gse27588$age1,50,51)=="6 ")]<-1
+pdata_gse27588$studyb[(substr(pdata_gse27588$age1,24,25)=="Hu") & (substr(pdata_gse27588$age1,60,61)=="16")]<-1
+pdata_gse27588$studyb[(substr(pdata_gse27588$age1,24,25)=="Wi") & (substr(pdata_gse27588$age1,52,53)=="16")]<-1
+pdata_gse27588$nofa<-sum(pdata_gse27588$studya==1)
+pdata_gse27588$nofb<-sum(pdata_gse27588$studyb==1)
+pdata_gse27588$nofc<-sum(pdata_gse27588$studyc==1)
+pdata_gse27588$nofd<-sum(pdata_gse27588$studyd==1)
+pdata_gse27588$nofe<-sum(pdata_gse27588$studye==1)
+pdata_gse27588$noff<-sum(pdata_gse27588$studyf==1)
+-
+pdata_gse27588 <- pdata_gse27588[just_vars_mous]
+-
+
+#summary(pdata_gse23182)
+pdata_gse23182$sampleid<-pdata_gse23182$geo_accession
+pdata_gse23182$sample<-pdata_gse23182$title
+pdata_gse23182$study<-"gse23182"
+pdata_gse23182$disease1<-pdata_gse23182$source_name_ch1
+pdata_gse23182$sex1<-NA
+pdata_gse23182$age1<-NA
+pdata_gse23182$taxid<-pdata_gse23182$taxid_ch1
+pdata_gse23182$platform<-pdata_gse23182$platform_id
+pdata_gse23182$normlzn<-pdata_gse23182$data_processing
+pdata_gse23182$anatomy1<-"brain"
+pdata_gse23182$anatomy2<-"hippocampus"
+pdata_gse23182$anim_model<-"mouse scrapie, +/- LPS"
+pdata_gse23182$anim_strain<-"C57Bl/6J"
+pdata_gse23182$innoc_strain<-substr(pdata_gse23182$characteristics_ch1.2,15,18)
+pdata_gse23182$chal_strain<-substr(pdata_gse23182$characteristics_ch1.3,16,27)
+pdata_gse23182$innoc_rout<-"intracranial"
+pdata_gse23182$chal_rout<-NA
+pdata_gse23182$dpi<-"126"
+pdata_gse23182$comment<-"no pub, ME7 prion infected mice and mice innoculated with Normal brain homogenate (NBH), 18 wks post-innoculation mice administered 500ug/kg LPS or saline control, 3 mice per group, ONLY USE studya"
+pdata_gse23182$amyloid[substr(pdata_gse23182$source_name_ch1,1,7)=="ME7 + s"] <- 1
+pdata_gse23182$amyloid[substr(pdata_gse23182$source_name_ch1,1,7)=="NBH + s"] <- 0
+pdata_gse23182$t1or2<-2
+# study breakdown by LPS/saline:
+pdata_gse23182$studya<-0
+pdata_gse23182$studyb<-0
+pdata_gse23182$studyc<-0
+pdata_gse23182$studyd<-0
+pdata_gse23182$studye<-0
+pdata_gse23182$studyf<-0
+pdata_gse23182$studya[substr(pdata_gse23182$chal_strain,1,3)=="sal"]<-1
+pdata_gse23182$studyb[substr(pdata_gse23182$chal_strain,1,3)=="500"]<-1
+pdata_gse23182$nofa<-sum(pdata_gse23182$studya==1)
+pdata_gse23182$nofb<-sum(pdata_gse23182$studyb==1)
+pdata_gse23182$nofc<-sum(pdata_gse23182$studyc==1)
+pdata_gse23182$nofd<-sum(pdata_gse23182$studyd==1)
+pdata_gse23182$nofe<-sum(pdata_gse23182$studye==1)
+pdata_gse23182$noff<-sum(pdata_gse23182$studyf==1)
+-
+pdata_gse23182 <- pdata_gse23182[just_vars_mous]
+-
+
+#summary(pdata_gse7207_339)
+pdata_gse7207_339$sampleid<-pdata_gse7207_339$geo_accession
+pdata_gse7207_339$sample<-pdata_gse7207_339$title
+pdata_gse7207_339$study<-"gse7207_339"
+pdata_gse7207_339$disease1<-pdata_gse7207_339$title
+pdata_gse7207_339$sex1<-NA
+pdata_gse7207_339$age1<-NA
+pdata_gse7207_339$taxid<-pdata_gse7207_339$taxid_ch1
+pdata_gse7207_339$platform<-pdata_gse7207_339$platform_id
+pdata_gse7207_339$normlzn<-pdata_gse7207_339$data_processing
+pdata_gse7207_339$anatomy1<-"brain"
+pdata_gse7207_339$anatomy2<-"whole brain"
+pdata_gse7207_339$anim_model<-"mouse scrapie"
+pdata_gse7207_339$anim_strain<-"C57Bl/6J"
+pdata_gse7207_339$innoc_strain<-substr(pdata_gse7207_339$title,7,9)
+pdata_gse7207_339$chal_strain<-NA
+pdata_gse7207_339$innoc_rout<-"intraperitoneal"
+pdata_gse7207_339$chal_rout<-NA
+pdata_gse7207_339$dpi<-"145"
+pdata_gse7207_339$comment<-"no pub, C57Bl/6J mice challenged w/RML prion or mock brain homogenate intraperitoneally, whole brain harvested @145dpi, with mice at terminal disease @~200dpi, supposedly 3groupsX3replicates (more like 2 groupX3reps split across gpl339 & gpl340?). TREAT 430A & B as redundant expts, USE 430A(339)"
+pdata_gse7207_339$amyloid[substr(pdata_gse7207_339$title,7,9)=="RML"] <- 1
+pdata_gse7207_339$amyloid[substr(pdata_gse7207_339$title,7,9)=="Moc"] <- 0
+pdata_gse7207_339$t1or2<-2
+pdata_gse7207_339$studya<-1
+pdata_gse7207_339$studyb<-0
+pdata_gse7207_339$studyc<-0
+pdata_gse7207_339$studyd<-0
+pdata_gse7207_339$studye<-0
+pdata_gse7207_339$studyf<-0
+pdata_gse7207_339$nofa<-sum(pdata_gse7207_339$studya==1)
+pdata_gse7207_339$nofb<-sum(pdata_gse7207_339$studyb==1)
+pdata_gse7207_339$nofc<-sum(pdata_gse7207_339$studyc==1)
+pdata_gse7207_339$nofd<-sum(pdata_gse7207_339$studyd==1)
+pdata_gse7207_339$nofe<-sum(pdata_gse7207_339$studye==1)
+pdata_gse7207_339$noff<-sum(pdata_gse7207_339$studyf==1)
+-
+pdata_gse7207_339 <- pdata_gse7207_339[just_vars_mous]
+-
+
+#summary(pdata_gse7207_340)
+# Do NOT use this study
+pdata_gse7207_340$sampleid<-pdata_gse7207_340$geo_accession
+pdata_gse7207_340$sample<-pdata_gse7207_340$title
+pdata_gse7207_340$study<-"gse7207_340"
+pdata_gse7207_340$disease1<-pdata_gse7207_340$title
+pdata_gse7207_340$sex1<-NA
+pdata_gse7207_340$age1<-NA
+pdata_gse7207_340$taxid<-pdata_gse7207_340$taxid_ch1
+pdata_gse7207_340$platform<-pdata_gse7207_340$platform_id
+pdata_gse7207_340$normlzn<-pdata_gse7207_340$data_processing
+pdata_gse7207_340$anatomy1<-"brain"
+pdata_gse7207_340$anatomy2<-"whole brain"
+pdata_gse7207_340$anim_model<-"mouse scrapie"
+pdata_gse7207_340$anim_strain<-"C57Bl/6J"
+pdata_gse7207_340$innoc_strain<-substr(pdata_gse7207_340$title,7,9)
+pdata_gse7207_340$chal_strain<-NA
+pdata_gse7207_340$innoc_rout<-"intraperitoneal"
+pdata_gse7207_340$chal_rout<-NA
+pdata_gse7207_340$dpi<-"145"
+pdata_gse7207_340$comment<-"no pub, C57Bl/6J mice challenged w/RML prion or mock brain homogenate intraperitoneally, whole brain harvested @145dpi, with mice at terminal disease @~200dpi, supposedly 3groupsX3replicates (more like 2 groupX3reps split across gpl339 & gpl340?). TREAT 430A & B as redundant expts, USE 430A(339)"
+pdata_gse7207_340$amyloid[substr(pdata_gse7207_340$title,7,9)=="RML"] <- 1
+pdata_gse7207_340$amyloid[substr(pdata_gse7207_340$title,7,9)=="Moc"] <- 0
+pdata_gse7207_340$t1or2<-2
+pdata_gse7207_340$studya<-1
+pdata_gse7207_340$studyb<-0
+pdata_gse7207_340$studyc<-0
+pdata_gse7207_340$studyd<-0
+pdata_gse7207_340$studye<-0
+pdata_gse7207_340$studyf<-0
+pdata_gse7207_340$nofa<-sum(pdata_gse7207_340$studya==1)
+pdata_gse7207_340$nofb<-sum(pdata_gse7207_340$studyb==1)
+pdata_gse7207_340$nofc<-sum(pdata_gse7207_340$studyc==1)
+pdata_gse7207_340$nofd<-sum(pdata_gse7207_340$studyd==1)
+pdata_gse7207_340$nofe<-sum(pdata_gse7207_340$studye==1)
+pdata_gse7207_340$noff<-sum(pdata_gse7207_340$studyf==1)
+-
+pdata_gse7207_340 <- pdata_gse7207_340[just_vars_mous]
+-
+
+#summary(pdata_gse14499)
+pdata_gse14499$sampleid<-pdata_gse14499$geo_accession
+pdata_gse14499$sample<-pdata_gse14499$title
+pdata_gse14499$study<-"gse14499"
+pdata_gse14499$disease1<-paste(pdata_gse14499$characteristics_ch1.1, pdata_gse14499$characteristics_ch1.2, pdata_gse14499$characteristics_ch1, sep=" // ")
+pdata_gse14499$sex1<-NA
+pdata_gse14499$age1<-"6 months"
+pdata_gse14499$taxid<-pdata_gse14499$taxid_ch1
+pdata_gse14499$platform<-pdata_gse14499$platform_id
+pdata_gse14499$normlzn<-pdata_gse14499$data_processing
+pdata_gse14499$anatomy1<-"brain"
+pdata_gse14499$anatomy2<-pdata_gse14499$characteristics_ch1
+pdata_gse14499$anim_model<-"mouse AD(APP w/Thy1 promoter) +/- BDNF lentivirus"
+pdata_gse14499$anim_strain<-"Bl/6"
+pdata_gse14499$innoc_strain<-pdata_gse14499$characteristics_ch1.2
+pdata_gse14499$chal_strain<-NA
+pdata_gse14499$innoc_rout<-"intracerebral/entorhinal"
+pdata_gse14499$chal_rout<-NA
+pdata_gse14499$dpi<-"28"
+pdata_gse14499$comment<-"nagahara2009, 26 Samples: 4 APP(J20-Swedish/Indiana) transgenic mice BDNF/GFP treated (via lentivirus), 4 APP transgenic mice GFP only treated, 3 non-trangenic mice sham lesion and 2 non-transgenic mice GFP treated, for both: entorhinal cortex and hippocampus"
+#Gene expression in the entorhinal cortex and hippocampus were compared with 
+# mouse whole-genome arrays in WT mice after sham surgery (n=3), in WT mice 
+# receiving injections of lenti-GFP (n=2), in TGGFP mice (n=4) and in 
+# TGBDNF mice (n=4) 4 weeks after gene delivery
+#Performance of sham-op & GFP-injected WT mice the same & thus were combined 
+# for analysis by nagahara2009
+pdata_gse14499$amyloid[(substr(pdata_gse14499$characteristics_ch1.2,12,15)!= "BDNF") & (substr(pdata_gse14499$characteristics_ch1.1, 11, 13)=="APP")] <- 1
+pdata_gse14499$amyloid[(substr(pdata_gse14499$characteristics_ch1.2,12,15)!= "BDNF") & (substr(pdata_gse14499$characteristics_ch1.1, 11, 13)=="non")] <- 0
+pdata_gse14499$t1or2<-2
+# study breakdown among non-BDNF by brain region:
+pdata_gse14499$studya<-0
+pdata_gse14499$studyb<-0
+pdata_gse14499$studyc<-0
+pdata_gse14499$studyd<-0
+pdata_gse14499$studye<-0
+pdata_gse14499$studyf<-0
+pdata_gse14499$studya[(substr(pdata_gse14499$innoc_strain,12,15)!= "BDNF") & (substr(pdata_gse14499$anatomy2,9,13)=="Entor")]<-1
+pdata_gse14499$studyb[(substr(pdata_gse14499$innoc_strain,12,15)!= "BDNF") & (substr(pdata_gse14499$anatomy2,9,13)=="Hippo")]<-1
+pdata_gse14499$nofa<-sum(pdata_gse14499$studya==1)
+pdata_gse14499$nofb<-sum(pdata_gse14499$studyb==1)
+pdata_gse14499$nofc<-sum(pdata_gse14499$studyc==1)
+pdata_gse14499$nofd<-sum(pdata_gse14499$studyd==1)
+pdata_gse14499$nofe<-sum(pdata_gse14499$studye==1)
+pdata_gse14499$noff<-sum(pdata_gse14499$studyf==1)
+-
+pdata_gse14499 <- pdata_gse14499[just_vars_mous]
+-
+
+# # # # # H E R E : CHECK  SELECTS ! ! !
+#summary(pdata_gse10908)
+# Do NOT use this study - it has an empty expression set
+#   I emailed GEO (they have no further info)
+#   I emailed Prinzen lab (Claudia Prinzen - prinzen@uni-mainz.de) who referred me to Dietrich Trumbach who we are collaborating with as of July 2011
+pdata_gse10908$sampleid<-pdata_gse10908$geo_accession
+pdata_gse10908$sample<-pdata_gse10908$title
+pdata_gse10908$study<-"gse10908"
+pdata_gse10908$disease1<-pdata_gse10908$source_name_ch1
+pdata_gse10908$sex1<-pdata_gse10908$characteristics_ch1
+pdata_gse10908$age1<-"5 months"
+pdata_gse10908$taxid<-pdata_gse10908$taxid_ch1
+pdata_gse10908$platform<-pdata_gse10908$platform_id
+pdata_gse10908$normlzn<-"ChipInspector identifies changes based on single probes. Transcript coverage >3 probes chosen. Intensity normalisation of each array. Significance analysis of microarrays"
+pdata_gse10908$anatomy1<-"brain"
+pdata_gse10908$anatomy2<-"whole brain"
+pdata_gse10908$anim_model<-"mouse AD (APP[V717I]) +/- ADAM10 overexpression"
+pdata_gse10908$anim_strain<-pdata_gse10908$source_name_ch1
+pdata_gse10908$innoc_strain<-NA
+pdata_gse10908$chal_strain<-NA
+pdata_gse10908$innoc_rout<-NA
+pdata_gse10908$chal_rout<-NA
+pdata_gse10908$dpi<-NA
+pdata_gse10908$comment<-"prinzen2009, brain @5 mos, transgenic ADAM10 vs dnADAM10 vs FVB/N WT (n=3 fem). Transgenic ADAM10/APP[V717I] vs dnADAM10/APP[V717I] vs APP[V717I] (n=3 fem, n=3 male). @5 mos APP[V717I] w/cog deficit, but plaque several months later (Moechars1999). mono-trans mice: 9 arrays. double-trans: 18 arrays"
+pdata_gse10908$amyloid[substr(pdata_gse10908$source_name_ch1,1,10)=="APP[V717I]"] <- 1
+pdata_gse10908$amyloid[substr(pdata_gse10908$source_name_ch1,1,5)=="FVB/N"] <- 0
+pdata_gse10908$t1or2<-2
+# studya is among non-ADAM10 transgenics:
+pdata_gse10908$studya<-0
+pdata_gse10908$studyb<-0
+pdata_gse10908$studyc<-0
+pdata_gse10908$studyd<-0
+pdata_gse10908$studye<-0
+pdata_gse10908$studyf<-0
+pdata_gse10908$studya[!is.na(pdata_gse10908$amyloid)]<-1
+pdata_gse10908$nofa<-sum(pdata_gse10908$studya==1)
+pdata_gse10908$nofb<-sum(pdata_gse10908$studyb==1)
+pdata_gse10908$nofc<-sum(pdata_gse10908$studyc==1)
+pdata_gse10908$nofd<-sum(pdata_gse10908$studyd==1)
+pdata_gse10908$nofe<-sum(pdata_gse10908$studye==1)
+pdata_gse10908$noff<-sum(pdata_gse10908$studyf==1)
+-
+pdata_gse10908 <- pdata_gse10908[just_vars_mous]
+-
+
+#pdata_ski2006 created here
+sampleid<-c("ME7_19", "ME7_20", "22L_21", "22L_22", "RML_23", "RML_24")
+sample<-c("19_18B (4-22-02) ME7 146 dpi (3-14-02 BMAP pauls with scrapie)", "20_18-lower (4-1-02) ME7 146 dpi.  Beautiful scatter (3-14-02 BMAP pauls with scrapie)", "21_18-4th (4-22-02)  22L 146 dpi (3-14-02 BMAP pauls with scrapie)", "22_18-5th (4-24-02) 22L 146 dpi (3-14-02 BMAP pauls with scrapie)", "23_18D (6-19-03) RML 146 dpi (3-3-03 BMAP-pam's)", "24_18-2-4th (4-24-02)  RML 146 dpi (12-01 BMAP-pauls no scrapie)")
+study<-c("ski2006", "ski2006", "ski2006", "ski2006", "ski2006", "ski2006")
+disease1<-c("ME7scrapie:mock", "ME7scrapie:mock", "22Lscrapie:mock", "22Lscrapie:mock", "RMLscrapie:mock", "RMLscrapie:mock")
+pdata_ski2006<-data.frame(sampleid, sample, study, disease1)
+rm(sampleid, sample, study, disease1)
+pdata_ski2006$sex1<-"male"
+pdata_ski2006$age1<-NA
+pdata_ski2006$taxid<-"10090"
+pdata_ski2006$platform<-"skinner2006_bmap_gpl"
+pdata_ski2006$normlzn<-"data was exported to Microsoft Excel and using the QuantArray QAreduce macro spot values were normalized based on total average spot intensity and background subtracted"
+pdata_ski2006$anatomy1<-"brain"
+pdata_ski2006$anatomy2<-"whole brain"
+pdata_ski2006$anim_model<-"mouse scrapie"
+pdata_ski2006$anim_strain<-"C57Bl/10"
+pdata_ski2006$innoc_strain<-substr(pdata_ski2006$disease1,1,3)
+pdata_ski2006$chal_strain<-NA
+pdata_ski2006$innoc_rout<-"intracerebral"
+pdata_ski2006$chal_rout<-NA
+pdata_ski2006$dpi<-"146"
+pdata_ski2006$comment<-"skinner2006, ONLY log2 ratios of two color arrays, 6 scrapie-infected male C57BL/10 mice (split among 3 strains: 2 ME7, 2 RML-Chandler, 2 22L), vs a single mock-infcts mouse (#18), sac'd at 146 days. dye swap gives 2 hybs/mouse. 104d mice not used here as these overlap with ski2008"
+pdata_ski2006$amyloid <- 1
+pdata_ski2006$t1or2<-1
+# only one studya as not enough n to breakdown by strain (2 mouse/strain):
+pdata_ski2006$studya<-1
+pdata_ski2006$studyb<-0
+pdata_ski2006$studyc<-0
+pdata_ski2006$studyd<-0
+pdata_ski2006$studye<-0
+pdata_ski2006$studyf<-0
+pdata_ski2006$nofa<-sum(pdata_ski2006$studya==1)
+pdata_ski2006$nofb<-sum(pdata_ski2006$studyb==1)
+pdata_ski2006$nofc<-sum(pdata_ski2006$studyc==1)
+pdata_ski2006$nofd<-sum(pdata_ski2006$studyd==1)
+pdata_ski2006$nofe<-sum(pdata_ski2006$studye==1)
+pdata_ski2006$noff<-sum(pdata_ski2006$studyf==1)
+-
+pdata_ski2006 <- pdata_ski2006[just_vars_mous]
+-
+
+#pdata_ski2008 created here
+sampleid<-c("mock_10B", "ME7_11B", "a22L_13B", "RML_16B", "mock_9B")
+sample<-c("mock-infected w/normal brain homog", "mouse scrapie ME7 infected", "mouse scrapie 22L infected", "mouse scrapie RML/Chandler infected", "mock-infected w/normal brain homog")
+study<-c("ski2008", "ski2008", "ski2008", "ski2008", "ski2008")
+disease1<-c("control NBH", "scrapie ME7", "scrapie 22L", "scrapie RML", "control NBH")
+pdata_ski2008<-data.frame(sampleid, sample, study, disease1)
+rm(sampleid, sample, study, disease1)
+pdata_ski2008$sex1<-"male"
+pdata_ski2008$age1<-NA
+pdata_ski2008$taxid<-"10090"
+pdata_ski2008$platform<-"GPL339"
+pdata_ski2008$normlzn<-"data was normalized from the Affymetrix output ﬁles using RMAExpress"
+pdata_ski2008$anatomy1<-"brain"
+pdata_ski2008$anatomy2<-"whole brain"
+pdata_ski2008$anim_model<-"mouse scrapie"
+pdata_ski2008$anim_strain<-"C57Bl/10"
+pdata_ski2008$innoc_strain<-substr(pdata_ski2008$disease1,9,11)
+pdata_ski2008$chal_strain<-NA
+pdata_ski2008$innoc_rout<-"intracerebral"
+pdata_ski2008$chal_rout<-NA
+pdata_ski2008$dpi<-"104"
+pdata_ski2008$comment<-"kim2008, 2 mock & 3 scrapie-infected male C57BL/10 mice (1 ME7, 1 RML-Chandler, 1 22L)"
+pdata_ski2008$amyloid[substr(pdata_ski2008$disease1,1,7)=="scrapie"] <- 1
+pdata_ski2008$amyloid[substr(pdata_ski2008$disease1,1,7)=="control"] <- 0
+pdata_ski2008$t1or2<-2
+# only one studya as not enough n to breakdown by strain (1 mouse/strain):
+pdata_ski2008$studya<-1
+pdata_ski2008$studyb<-0
+pdata_ski2008$studyc<-0
+pdata_ski2008$studyd<-0
+pdata_ski2008$studye<-0
+pdata_ski2008$studyf<-0
+pdata_ski2008$nofa<-sum(pdata_ski2008$studya==1)
+pdata_ski2008$nofb<-sum(pdata_ski2008$studyb==1)
+pdata_ski2008$nofc<-sum(pdata_ski2008$studyc==1)
+pdata_ski2008$nofd<-sum(pdata_ski2008$studyd==1)
+pdata_ski2008$nofe<-sum(pdata_ski2008$studye==1)
+pdata_ski2008$noff<-sum(pdata_ski2008$studyf==1)
+-
+pdata_ski2008 <- pdata_ski2008[just_vars_mous]
+-
+
+
+##### Create text files:
+# HUMAN
+write.table(exprs_gse15222, file="/home/adrian/tse_db/meta_analysis/exprs_gse15222.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_gse5281, file="/home/adrian/tse_db/meta_analysis/exprs_gse5281.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_gse20295, file="/home/adrian/tse_db/meta_analysis/exprs_gse20295.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_gse7621, file="/home/adrian/tse_db/meta_analysis/exprs_gse7621.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+-
+write.table(pdata_gse15222, file="/home/adrian/tse_db/meta_analysis/pdata_gse15222.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(pdata_gse5281, file="/home/adrian/tse_db/meta_analysis/pdata_gse5281.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(pdata_gse20295, file="/home/adrian/tse_db/meta_analysis/pdata_gse20295.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(pdata_gse7621, file="/home/adrian/tse_db/meta_analysis/pdata_gse7621.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+-
+
+# MOUSE
+write.table(exprs_gse1840, file="/home/adrian/tse_db/meta_analysis/exprs_gse1840.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_gse10310_4134, file="/home/adrian/tse_db/meta_analysis/exprs_gse10310_4134.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_gse10310_6412, file="/home/adrian/tse_db/meta_analysis/exprs_gse10310_6412.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_gse19677_1261, file="/home/adrian/tse_db/meta_analysis/exprs_gse19677_1261.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_gse19677_6333, file="/home/adrian/tse_db/meta_analysis/exprs_gse19677_6333.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_gse9914_1261, file="/home/adrian/tse_db/meta_analysis/exprs_gse9914_1261.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_gse9914_339, file="/home/adrian/tse_db/meta_analysis/exprs_gse9914_339.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_gse2867, file="/home/adrian/tse_db/meta_analysis/exprs_gse2867.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_gse27588, file="/home/adrian/tse_db/meta_analysis/exprs_gse27588.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_gse23182, file="/home/adrian/tse_db/meta_analysis/exprs_gse23182.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_gse7207_339, file="/home/adrian/tse_db/meta_analysis/exprs_gse7207_339.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_gse7207_340, file="/home/adrian/tse_db/meta_analysis/exprs_gse7207_340.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_gse14499, file="/home/adrian/tse_db/meta_analysis/exprs_gse14499.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_gse10908, file="/home/adrian/tse_db/meta_analysis/exprs_gse10908.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_ski2006, file="/home/adrian/tse_db/meta_analysis/exprs_ski2006.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(exprs_ski2008, file="/home/adrian/tse_db/meta_analysis/exprs_ski2008.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+-
+write.table(pdata_gse1840, file="/home/adrian/tse_db/meta_analysis/pdata_gse1840.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE) 
+write.table(pdata_gse10310_4134, file="/home/adrian/tse_db/meta_analysis/pdata_gse10310_4134.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE) 
+write.table(pdata_gse10310_6412, file="/home/adrian/tse_db/meta_analysis/pdata_gse10310_6412.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE) 
+write.table(pdata_gse19677_1261, file="/home/adrian/tse_db/meta_analysis/pdata_gse19677_1261.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE) 
+write.table(pdata_gse19677_6333, file="/home/adrian/tse_db/meta_analysis/pdata_gse19677_6333.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE) 
+write.table(pdata_gse9914_1261, file="/home/adrian/tse_db/meta_analysis/pdata_gse9914_1261.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE) 
+write.table(pdata_gse9914_339, file="/home/adrian/tse_db/meta_analysis/pdata_gse9914_339.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE) 
+write.table(pdata_gse2867, file="/home/adrian/tse_db/meta_analysis/pdata_gse2867.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE) 
+write.table(pdata_gse27588, file="/home/adrian/tse_db/meta_analysis/pdata_gse27588.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE) 
+write.table(pdata_gse23182, file="/home/adrian/tse_db/meta_analysis/pdata_gse23182.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE) 
+write.table(pdata_gse7207_339, file="/home/adrian/tse_db/meta_analysis/pdata_gse7207_339.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE) 
+write.table(pdata_gse7207_340, file="/home/adrian/tse_db/meta_analysis/pdata_gse7207_340.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE) 
+write.table(pdata_gse14499, file="/home/adrian/tse_db/meta_analysis/pdata_gse14499.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE) 
+write.table(pdata_gse10908, file="/home/adrian/tse_db/meta_analysis/pdata_gse10908.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE) 
+write.table(pdata_ski2006, file="/home/adrian/tse_db/meta_analysis/pdata_ski2006.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE) 
+write.table(pdata_ski2008, file="/home/adrian/tse_db/meta_analysis/pdata_ski2008.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE) 
+-
+
+##### Export expression data to SQL:
+##### Run PHP code file(s) from localhost (http://localhost/) as 
+#####  noted in the programs:
+#####       /home/adrian/tse_db/meta_analysis/input_exprs_hum.php
+#####       /home/adrian/tse_db/meta_analysis/input_pdata_hum.php
+#####       /home/adrian/tse_db/meta_analysis/input_exprs_mous.php
+#####       /home/adrian/tse_db/meta_analysis/input_pdata_mous.php
+#####  ...so run as:
+#####        http://localhost/input_exprs_hum.php
+#####        http://localhost/input_pdata_hum.php
+#####        http://localhost/input_exprs_mous.php
+#####        http://localhost/input_pdata_mous.php
+
+
+###########################################################################
+##### Access gene linker tables, gene2_, via: 
+#####   ftp://ftp.ncbi.nih.gov/gene/DATA/
+#####   download gene2refseq, gene2unigene, and gene2accession,
+#####   view in R, and then export to SQL:
+
+##### Just to view a few rows of these (too BIG to read fully in R):
+
+gene2refseq110320 <- read.table("/home/adrian/tse_db/meta_analysis/gene2refseq.txt", header=FALSE, sep="\t", nrows=10)
+
+gene2unigene110429 <- read.table("/home/adrian/tse_db/meta_analysis/gene2unigene.txt", header=FALSE, sep="\t", nrows=10)
+
+gene2accession110320 <- read.table("/home/adrian/tse_db/meta_analysis/gene2accession.txt", header=FALSE, sep="\t", nrows=10)
+
+#Both have 13 variables, and both have problem with header starting with "#". 
+#  So, reading just the header using comment.char="" to get it to ignore the 
+#  "#" (I put each variable name on its own line):
+
+gene2refseq110320 <- read.table("/home/adrian/tse_db/meta_analysis/gene2refseq.txt", header=FALSE, sep="\t", nrows=1, comment.char="")
+print(gene2refseq110320)
+rm(gene2refseq110320)
+##Format: 
+#tax_id 
+#GeneID 
+#status 
+#RNA_nucleotide_accession.version 
+#RNA_nucleotide_gi 
+#protein_accession.version 
+#protein_gi 
+#genomic_nucleotide_accession.version 
+#genomic_nucleotide_gi 
+#start_position_on_the_genomic_accession 
+#end_position_on_the_genomic_accession 
+#orientation 
+#assembly 
+#(tab is used as a separator, pound sign - start of a comment)
+##### ONLY KEEP tax_id, GeneID and genomic_nucleotide_accession.version
+
+gene2unigene110429 <- read.table("/home/adrian/tse_db/meta_analysis/gene2unigene.txt", header=FALSE, sep="\t", nrows=1, comment.char="")
+##Format: 
+#GeneID 
+#UniGene_cluster 
+#(tab is used as a separator, pound sign - start of a comment)
+print(gene2unigene110429)
+rm(gene2unigene110429)
+
+gene2accession110320 <- read.table("/home/adrian/tse_db/meta_analysis/gene2accession.txt", header=FALSE, sep="\t", nrows=1, comment.char="")
+print(gene2accession110320)
+##Format: 
+#tax_id 
+#GeneID 
+#status 
+#RNA_nucleotide_accession.version 
+#RNA_nucleotide_gi 
+#protein_accession.version 
+#protein_gi 
+#genomic_nucleotide_accession.version 
+#genomic_nucleotide_gi 
+#start_position_on_the_genomic_accession 
+#end_position_on_the_genomic_accession 
+#orientation 
+#assembly 
+#(tab is used as a separator, pound sign - start of a comment)
+rm(gene2accession110320)
+
+##### To test reading into data frame with your own variable names:
+gene2refseq110320 <- read.table("/home/adrian/tse_db/meta_analysis/gene2refseq.txt", header=FALSE, sep="\t", col.names=c("tax_id", "GeneID",  "status", "RNA_nucleotide_accession.version", "RNA_nucleotide_gi",  "protein_accession.version", "protein_gi", "genomic_nucleotide_accession.version", "genomic_nucleotide_gi",  "start_position_on_the_genomic_accession",  "end_position_on_the_genomic_accession", "orientation", "assembly"), nrows=10)
+
+##### Export gene2_ files to SQL
+##### Create refseq_mous (with only extant refseq)
+##### Create refseq_no_v_mous (with .version nums removed)
+##### Create refseq/unigene ID called 'refuni'
+##### 
+#####
+##### Run PHP code file(s) from localhost (http://localhost/) as 
+#####  noted in the program:
+#####       /home/adrian/tse_db/meta_analysis/input_gene2_.php
+#####       /home/adrian/tse_db/meta_analysis/refseq_mous.php
+#####       /home/adrian/tse_db/meta_analysis/refseq_no_v_mous.php
+#####       /home/adrian/tse_db/meta_analysis/master_id_mous.php
+#####       /home/adrian/tse_db/meta_analysis/refuni.php
+#####  ...so run as:
+#####        http://localhost/input_gene2_.php
+#####        http://localhost/refseq_mous.php
+#####        http://localhost/refseq_no_v_mous.php
+#####        http://localhost/master_id_mous.php
+#####        http://localhost/refuni.php
+#####
+##### Eventually, to save space, you may want to delete:
+#####     gene2refseq_mous
+#####     refseq_mous 
+#####     gene2accession_mous
+#####     gene2accession_mous_distinct
+
+
+########################################################################
+##### Extract probe-gene translation table from appropriate GPL/platform
+#####   and export to SQL:
+#HUMAN:
+#for exprs_gse15222: GPL2700 (refseq in GB_ACC)
+#for exprs_gse5281: GPL570 (genbank accession and refseq in GB_ACC)
+#for exprs_20295: GPL96 (genbank accession and refseq in GB_ACC)
+#for exprs_gse7621: GPL570 (genbank accession and refseq in GB_ACC)
+#
+#MOUSE:
+#for exprs_gse1840: GPL1487
+#for exprs_gse10310: GPL4134 and GPL6412/bmapski2006
+#for exprs_gse19677: GPL1261 and GPL6333
+#for exprs_gse9914: GPL1261 and GPL339
+#for exprs_gse2867: GPL339
+#for exprs_gse27588: GPL11094
+#for exprs_gse23182: GPL1261
+#for exprs_gse7207: GPL339 and GPL340
+#for exprs_gse14499: GPL1261
+#for exprs_gse10908: GPL1261
+#for exprs_ski2008: GPL339
+#for exprs_ski2006: gplbmapski2006
+
+gpl2700 <- getGEO("GPL2700")
+gpl570 <- getGEO("GPL570")
+gpl96 <- getGEO("GPL96")
+-
+gpl1487 <- getGEO("GPL1487")
+gpl4134 <- getGEO("GPL4134")
+gpl6412 <- getGEO("GPL6412")
+gpl1261 <- getGEO("GPL1261")
+gpl6333 <- getGEO("GPL6333")
+gpl339 <- getGEO("GPL339")
+gpl340 <- getGEO("GPL340")
+gpl11094 <- getGEO("GPL11094")
+gplbmapski2006 <- read.table("/home/adrian/tse_db/meta_analysis/skinner2006_bmap_gpl_no_ctrls_trunc.txt", header=FALSE, sep="\t", na.strings="", skip=1, comment.char="", col.names=c("ID", "GB_ACC", "unigene"))
+-
+
+
+##### Access platform translation tables as data.frame:
+
+# HUMAN:
+trans_gpl2700 <- data.frame(Table(gpl2700))
+trans_gpl570 <- data.frame(Table(gpl570))
+trans_gpl96 <- data.frame(Table(gpl96))
+-
+     #Checks:
+             print(Table(gpl2700)[1:3,])
+             print(trans_gpl96[1:50,1:2])
+	     dim(trans_gpl96)
+
+# MOUSE:
+trans_gpl1487 <- data.frame(Table(gpl1487))
+trans_gpl4134 <- data.frame(Table(gpl4134))
+trans_gpl6412 <- data.frame(Table(gpl6412))
+trans_gpl1261 <- data.frame(Table(gpl1261))
+trans_gpl6333 <- data.frame(Table(gpl6333))
+trans_gpl339 <- data.frame(Table(gpl339))
+trans_gpl340 <- data.frame(Table(gpl340))
+trans_gpl11094 <- data.frame(Table(gpl11094))
+trans_gplbmapski2006 <- gplbmapski2006
+-
+
+##### Create text files:
+
+#HUMAN:
+writ_gpl2700 <- data.frame(Table(gpl2700))
+writ_gpl570 <- data.frame(Table(gpl570))
+writ_gpl96 <- data.frame(Table(gpl96))
+writ_gpl2700 <- writ_gpl2700[c(1,3)]
+writ_gpl570 <- writ_gpl570[c(1,2,11,12,13)]
+writ_gpl96 <- writ_gpl96[c(1,2,11,12,13)]
+-
+write.table(writ_gpl2700, file="/home/adrian/tse_db/meta_analysis/writ_gpl2700.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(writ_gpl570, file="/home/adrian/tse_db/meta_analysis/writ_gpl570.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(writ_gpl96, file="/home/adrian/tse_db/meta_analysis/writ_gpl96.txt", quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+-
+
+#MOUSE:
+writ_gpl1487<-trans_gpl1487[c(1,2)] # BMAP: "AI" prefix GenBank EST - won't use  directly, instead will link via AI number to use bmapski2006
+writ_gpl4134<-trans_gpl4134[c(1,7,12)] # Agilent: refseq and unigene
+writ_gpl6412<-trans_gpl6412[c(1,2)] # BMAP: "AI" prefix GenBank EST - won't use  directly, instead will link via AI number to use bmapski2006
+writ_gpl1261<-trans_gpl1261[c(1,2,11,12,13)] # Affy: real GenBank, symbol, GeneID, long-form refseq
+#writ_gpl6333<-trans_gpl6333[c(1,2)] # Illumina: real GenBank ***ID does not match to exprs set!! - won't use anyway since mis-coded in pdata as well
+writ_gpl339<-trans_gpl339[c(1,2,11,12,13)] # Affy: real GenBank, symbol, GeneID, long-form refseq
+#trans_gpl340 # won't use, since using 339 instead
+writ_gpl11094<-trans_gpl11094[c(1,5)] # Affy glyo V2: real GenBank
+writ_gplbmapski2006<-trans_gplbmapski2006
+-
+write.table(writ_gpl1487, file="/home/adrian/tse_db/meta_analysis/writ_gpl1487.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(writ_gpl4134, file="/home/adrian/tse_db/meta_analysis/writ_gpl4134.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(writ_gpl6412, file="/home/adrian/tse_db/meta_analysis/writ_gpl6412.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(writ_gpl1261, file="/home/adrian/tse_db/meta_analysis/writ_gpl1261.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(writ_gpl339, file="/home/adrian/tse_db/meta_analysis/writ_gpl339.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(writ_gpl11094, file="/home/adrian/tse_db/meta_analysis/writ_gpl11094.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+write.table(writ_gplbmapski2006, file="/home/adrian/tse_db/meta_analysis/writ_gplbmapski2006.txt",quote=FALSE, sep="\t", eol="\n", na="NA", row.names=FALSE, col.names=FALSE)
+-
+
+##### Export gpl data to SQL, and,
+##### Create long gpl tables (expanded to match each probe id to all its #####   refseqs for gpl570 and gpl96), in SQL:
+##### Run PHP code file(s) from localhost (http://localhost/) as 
+#####  noted in the programs:
+#####HUMAN    /home/adrian/tse_db/meta_analysis/input_gpl2700.php
+#####HUMAN    /home/adrian/tse_db/meta_analysis/input_gpl570.php
+#####HUMAN    /home/adrian/tse_db/meta_analysis/input_gpl96.php
+#####       /home/adrian/tse_db/meta_analysis/input_gpl4134r.php
+#####       /home/adrian/tse_db/meta_analysis/input_gpl4134u.php
+                   # gpl4134 is split into refseq and unigene tables
+#####       /home/adrian/tse_db/meta_analysis/input_gpl1261.php
+#####       /home/adrian/tse_db/meta_analysis/input_gpl339.php
+#####       /home/adrian/tse_db/meta_analysis/input_gpl11094.php
+#####       /home/adrian/tse_db/meta_analysis/input_gplbmapski2006.php
+#####HUMAN    /home/adrian/tse_db/meta_analysis/gpl2700_refseq_no_v.php
+#####HUMAN    /home/adrian/tse_db/meta_analysis/gpl570_long_refseq_no_v.php
+#####HUMAN    /home/adrian/tse_db/meta_analysis/gpl96_long_refseq_no_v.php
+#####       /home/adrian/tse_db/meta_analysis/gpl1261_long_refseq_no_v.php
+#####       /home/adrian/tse_db/meta_analysis/gpl339_long_refseq_no_v.php
+
+#####  ...so run as:
+#####HUMAN      http://localhost/input_gpl2700.php
+#####HUMAN      http://localhost/input_gpl570.php
+#####HUMAN      http://localhost/input_gpl96.php
+#####        http://localhost/input_gpl4134r.php
+#####        http://localhost/input_gpl4134u.php
+#####        http://localhost/input_gpl1261.php
+#####        http://localhost/input_gpl339.php
+#####        http://localhost/input_gpl11094.php
+#####        http://localhost/input_gplbmapski2006.php
+#####HUMAN      http://localhost/gpl2700_refseq_no_v.php
+#####HUMAN      http://localhost/gpl570_long_refseq_no_v.php
+#####HUMAN      http://localhost/gpl96_long_refseq_no_v.php
+#####        http://localhost/gpl1261_long_refseq_no_v.php
+#####        http://localhost/gpl339_long_refseq_no_v.php
+
+##### Then left outer join refuni to the gpl files...
+#####        http://localhost/link_gpl4134.php
+#####        http://localhost/link_gpl1261.php
+#####        http://localhost/link_gpl339.php
+#####        http://localhost/link_gplbmapski2006.php
+                 # holding off on gpl11094 for now
+
+##### Eventually, to save space, you may want to delete:
+#####     link_gpl4134dup
+#####     link_gpl1261_long_refseq_no_v_dup 
+#####     link_gpl339_long_refseq_no_v_dup
+#####     link_gplbmapski2006_dup
+
+
+# ( Given lack of NCBI support for EST Genbank conversion to 
+#   other IDs, consider build custom annotations using SQLForge:
+#
+#       library("AnnotationDbi")
+#       available.db0pkgs()
+#       source("http://bioconductor.org/biocLite.R")
+
+
+#######################################################################
+##### Joins in PHP/SQL:
+#####
+##### FOR BACKUP, NOTE THAT DB RESIDES IN: /var/lib/mysql/amyloidb/
+#####    (need ">sudo dolphin" to access it)
+#####
+
+##### Link expression files to refuni via gpl ID_ ...
+#####
+##### Run PHP code file(s) from localhost (http://localhost/) as 
+#####  noted in the program:
+#####       /home/adrian/tse_db/meta_analysis/link_exprs1840.php
+#####       /home/adrian/tse_db/meta_analysis/link_exprs2867.php
+#####       /home/adrian/tse_db/meta_analysis/link_exprs7207_339.php
+#####       /home/adrian/tse_db/meta_analysis/link_exprs9914_339.php
+#####       /home/adrian/tse_db/meta_analysis/link_exprs9914_1261.php
+#####       /home/adrian/tse_db/meta_analysis/link_exprs10310_4134.php
+#####       /home/adrian/tse_db/meta_analysis/link_exprs10310_6412.php
+#####       /home/adrian/tse_db/meta_analysis/link_exprs14499.php
+#####       /home/adrian/tse_db/meta_analysis/link_exprs19677_1261.php
+#####       /home/adrian/tse_db/meta_analysis/link_exprs23182.php
+#####       /home/adrian/tse_db/meta_analysis/link_exprsski2006.php
+#####       /home/adrian/tse_db/meta_analysis/link_exprsski2008.php
+#####  ...so run as:
+#####       http://localhost/link_exprs1840.php
+#####       http://localhost/link_exprs2867.php
+#####       http://localhost/link_exprs7207_339.php
+#####       http://localhost/link_exprs9914_339.php
+#####       http://localhost/link_exprs9914_1261.php
+#####       http://localhost/link_exprs10310_4134.php
+#####       http://localhost/link_exprs10310_6412.php
+#####       http://localhost/link_exprs14499.php
+#####       http://localhost/link_exprs19677_1261.php
+#####       http://localhost/link_exprs23182.php
+#####       http://localhost/link_exprsski2006.php
+#####       http://localhost/link_exprsski2008.php
+
+##### Take mean expression value within a group having the same refuni...
+#####
+##### Run PHP code file(s) from localhost (http://localhost/) as 
+#####  noted in the program:
+#####       /home/adrian/tse_db/meta_analysis/mexprs1840.php
+#####       /home/adrian/tse_db/meta_analysis/mexprs2867.php
+#####       /home/adrian/tse_db/meta_analysis/mexprs7207_339.php
+#####       /home/adrian/tse_db/meta_analysis/mexprs9914_339.php
+#####       /home/adrian/tse_db/meta_analysis/mexprs9914_1261.php
+#####       /home/adrian/tse_db/meta_analysis/mexprs10310_4134.php
+#####       /home/adrian/tse_db/meta_analysis/mexprs10310_6412.php
+#####       /home/adrian/tse_db/meta_analysis/mexprs14499.php
+#####       /home/adrian/tse_db/meta_analysis/mexprs19677_1261.php
+#####       /home/adrian/tse_db/meta_analysis/mexprs23182.php
+#####       /home/adrian/tse_db/meta_analysis/mexprsski2006.php
+#####       /home/adrian/tse_db/meta_analysis/mexprsski2008.php
+#####  ...so run as:
+#####       http://localhost/mexprs1840.php
+#####       http://localhost/mexprs2867.php
+#####       http://localhost/mexprs7207_339.php
+#####       http://localhost/mexprs9914_339.php
+#####       http://localhost/mexprs9914_1261.php
+#####       http://localhost/mexprs10310_4134.php
+#####       http://localhost/mexprs10310_6412.php
+#####       http://localhost/mexprs14499.php
+#####       http://localhost/mexprs19677_1261.php
+#####       http://localhost/mexprs23182.php
+#####       http://localhost/mexprsski2006.php
+#####       http://localhost/mexprsski2008.php
+
+##### Select substudies within each pdata...
+#####
+##### Run PHP code file(s) from localhost (http://localhost/) as 
+#####  noted in the program:
+#####       /home/adrian/tse_db/meta_analysis/pdata_selects.php
+#####  ...so run as:
+#####       http://localhost/pdata_selects.php
+
+##### Output deduplicated refuni and all mexprs files to be used in R
+##### 
+##### Run PHP code file(s) from localhost (http://localhost/) as 
+#####  noted in the program:
+#####       /home/adrian/tse_db/meta_analysis/output_refuni.php
+#####       /home/adrian/tse_db/meta_analysis/output_mexprs.php
+#####  ...so run as:
+#####       http://localhost/output_refuni.php
+#####       http://localhost/output_mexprs.php
+
+
+##### Go to r_analyz...
